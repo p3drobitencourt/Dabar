@@ -1,0 +1,80 @@
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# ===============================================
+# Arquivos gerados pelo Gradle e pelo Build System
+# ===============================================
+build/
+.gradle/
+captures/
+.cxx/
+local.properties
+
+# Arquivos APK e Bundle gerados
+*.apk
+*.aab
+*.ap_
+*.apks
+
+# =========================
+# Arquivos do Android Studio e IntelliJ (IDE)
+# =========================
+# Armazenam configurações locais do seu ambiente
+*.iml
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+
+# Evitar o diretório .idea inteiro é comum, mas os arquivos acima são os mais importantes.
+# Se todos no time usam a mesma versão do IDE, alguns arquivos do .idea podem ser compartilhados.
+# Para evitar problemas, a regra geral é ignorar tudo:
+# .idea/
+
+# =================
+# Arquivos de Log
+# =================
+*.log
+
+# =====================================
+# Arquivos de Chaves (MUITO IMPORTANTE)
+# =====================================
+# Contêm suas chaves de assinatura. NUNCA envie para o repositório!
+*.jks
+*.keystore
+
+# ================================
+# Arquivos do Google Services
+# ================================
+# O arquivo google-services.json geralmente PODE ser comitado.
+# Mas se ele contiver chaves de API sensíveis que você gerencia de outra forma (ex: via CI/CD),
+# você pode querer ignorá-lo. Na dúvida, NÃO ignore.
+# google-services.json
+
+# =======================
+# Arquivos do Sistema
+# =======================
+# Arquivos de sistema do macOS e Windows
+.DS_Store
+Thumbs.db
+
+# =======================
+# Arquivos de Profiling
+# =======================
+*.hprof
+*.hlog
