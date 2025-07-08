@@ -1,3 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Dabar</string>
+    <string-array name="categorias_array">
+        <item>Selecione a Categoria</item>
+        <item>Linguagens de programação III</item>
+        <item>Banco de Dados</item>
+        <item>Estruturas de Dados</item>
+        <item>Algoritmos</item>
+        <item>Redes de Computadores</item>
+        <item>Sistemas Operacionais</item>
+        <item>Inteligência Artificial</item>
+    </string-array>
 </resources>
