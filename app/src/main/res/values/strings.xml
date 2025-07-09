@@ -10,4 +10,5 @@
         <item>Sistemas Operacionais</item>
         <item>Inteligência Artificial</item>
     </string-array>
+    <string name="app_name">Dabar</string>
 </resources>
