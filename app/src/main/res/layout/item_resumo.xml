@@ -13,10 +13,24 @@
         android:text="Título do Resumo" />
 
     <TextView
+        android:id="@+id/textViewDescricao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textSize="14sp"
+        android:text="Descrição do resumo aqui..." />
+
+    <TextView
         android:id="@+id/textViewCategoria"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:text="Categoria da Matéria" />
+        android:layout_marginTop="8dp"
+        android:background="#E0E0E0"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:textSize="12sp"
+        android:text="Categoria" />
 
 </LinearLayout>

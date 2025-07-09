@@ -1,58 +1,70 @@
-
 package br.edu.ifsuldeminas.mch.dabar;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.ContextMenu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.List;
 
 public class BibliotecaActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private AdapterResumos adapter;
-    private ResumoDAO dao;
-    private List<Resumo> resumos;
+    private RecyclerView recyclerViewCategorias;
+    private AdapterCategorias adapter;
+    private CategoriaDAO dao;
+    private List<Categoria> categorias;
+    private FloatingActionButton fabNovaCategoria;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_biblioteca);
+        setContentView(R.layout.activity_biblioteca); // Usa o layout da Library
 
-        recyclerView = findViewById(R.id.recyclerViewResumos);
-        dao = new ResumoDAO(this);
-        resumos = dao.listarTodosResumos();
-        adapter = new AdapterResumos(this, resumos);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+        // Mapeia o RecyclerView e o Botão Flutuante (FAB) do seu layout
+        // ATENÇÃO: Verifique os IDs no seu arquivo activity_library.xml
+        recyclerViewCategorias = findViewById(R.id.recyclerViewResumos); // MUDE O ID se for diferente
+        fabNovaCategoria = findViewById(R.id.fab_nova_categoria); // ADICIONE ESTE BOTÃO NO SEU XML
 
-        registerForContextMenu(recyclerView);
+        dao = new CategoriaDAO(this);
+        categorias = dao.listarTodasCategorias();
+
+        // Configura a RecyclerView com o novo Adapter de Categorias
+        adapter = new AdapterCategorias(this, categorias);
+        recyclerViewCategorias.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewCategorias.setAdapter(adapter);
+
+        // Ação do botão para criar uma nova categoria
+        fabNovaCategoria.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(BibliotecaActivity.this, NovaCategoriaActivity.class));
+            }
+        });
+
+        // Opcional: Adicionar menu de contexto para editar/deletar categorias
+        registerForContextMenu(recyclerViewCategorias);
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        getMenuInflater().inflate(R.menu.context_menu_resumo, menu);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-        if (itemId == R.id.menu_ouvir) {
-            Toast.makeText(this, "Ouvindo...", Toast.LENGTH_SHORT).show();
-            return true;
-        } else if (itemId == R.id.menu_editar) {
-            Toast.makeText(this, "Editando...", Toast.LENGTH_SHORT).show();
-            return true;
-        } else if (itemId == R.id.menu_apagar) {
-            Toast.makeText(this, "Resumo apagado!", Toast.LENGTH_SHORT).show();
-            return true;
-        } else {
-            return super.onContextItemSelected(item);
+    protected void onResume() {
+        super.onResume();
+        // Recarrega a lista de categorias sempre que o usuário voltar para esta tela
+        if (dao != null && adapter != null) {
+            categorias.clear();
+            categorias.addAll(dao.listarTodasCategorias());
+            adapter.notifyDataSetChanged();
+            if (categorias.isEmpty()) {
+                Toast.makeText(this, "Nenhuma categoria encontrada. Crie uma nova!", Toast.LENGTH_SHORT).show();
+            }
         }
     }
+
+    // A lógica do menu de contexto (clique longo) agora se aplicaria a categorias
+    // (editar/deletar categoria), usando os novos métodos do CategoriaDAO.
 }

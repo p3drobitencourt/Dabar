@@ -23,7 +23,7 @@
             android:name=".NovaCategoria"
             android:exported="false" />
         <activity
-            android:name=".Library"
+            android:name=".BibliotecaActivity"
             android:exported="false" />
         <activity
             android:name=".NovoResumoActivity"
@@ -32,7 +32,7 @@
             android:name=".Home"
             android:exported="false" />
         <activity
-            android:name=".BibliotecaActivity"
+            android:name=".ListResumosActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
