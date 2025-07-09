@@ -1,24 +1,88 @@
 package br.edu.ifsuldeminas.mch.dabar;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Button btnGravarResumo;
+    private Button btnBibliotecaResumos;
+    private Button btnGuiaDabar;
+    private BottomNavigationView bottomNavigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+        // Define o layout que o Enrique criou como a view desta Activity
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        // Mapeia os componentes do layout para podermos usá-los no código
+        btnGravarResumo = findViewById(R.id.btn_gravar_resumo);
+        btnBibliotecaResumos = findViewById(R.id.btn_biblioteca_resumos);
+        btnGuiaDabar = findViewById(R.id.btn_guia_dabar);
+        bottomNavigation = findViewById(R.id.bottom_navigation);
+
+        // Configura as ações de clique para cada botão
+        setupButtonListeners();
+        // Configura a navegação da barra inferior
+        setupBottomNavigation();
+    }
+
+    private void setupButtonListeners() {
+        // Ação para o botão "Gravar novo resumo"
+        btnGravarResumo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Inicia a Activity para criar um novo resumo (a tela do Luis)
+                // Substitua 'NovoResumo.class' pela classe correta da tela de gravação
+                // startActivity(new Intent(MainActivity.this, NovoResumo.class));
+                Toast.makeText(MainActivity.this, "Abrir tela de gravação...", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Ação para o botão "Biblioteca de resumos"
+        btnBibliotecaResumos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Inicia a Activity da Biblioteca
+                startActivity(new Intent(MainActivity.this, BibliotecaActivity.class));
+            }
+        });
+
+        // Ação para o botão "Guia do dabar"
+        btnGuiaDabar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Ação para o guia (pode ser uma nova Activity ou um Dialog)
+                Toast.makeText(MainActivity.this, "Guia em construção!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setupBottomNavigation() {
+        // Impede que o item "Home" seja selecionável de novo, pois já estamos nela
+        bottomNavigation.setSelectedItemId(R.id.nav_home);
+
+        bottomNavigation.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.nav_library) {
+                startActivity(new Intent(this, BibliotecaActivity.class));
+                // finish(); // Opcional: fechar a MainActivity ao ir para outra tela
+                return true;
+            } else if (itemId == R.id.nav_new_category) {
+                startActivity(new Intent(this, NovaCategoriaActivity.class));
+                // finish();
+                return true;
+            }
+            // Não faz nada se clicar em Home, pois já estamos aqui
+            return false;
         });
     }
 }
