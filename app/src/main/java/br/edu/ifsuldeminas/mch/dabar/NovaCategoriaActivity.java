@@ -57,7 +57,7 @@ public class NovaCategoriaActivity extends AppCompatActivity {
             Toast.makeText(this, "Categoria cadastrada com sucesso!", Toast.LENGTH_SHORT).show();
             finish();
         } catch (Exception e) {
-            Toast.makeText(this, "Erro ao cadastrar categoria.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Erro ao cadastrar categoria.", Toast.LENGTHA_SHORT).show();
             e.printStackTrace();
         }
     }
