@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context=".GravarActivity">
+    tools:context=".MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -38,14 +38,18 @@
 
         </androidx.appcompat.widget.Toolbar>
 
+
+
     </com.google.android.material.appbar.AppBarLayout>
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <FrameLayout
             android:id="@+id/buttonGravar"
@@ -80,8 +84,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@android:color/white"
-        app:menu="@menu/bottom_nav_menu"
-        app:itemIconTint="@color/bottom_nav_item_color"
-        app:itemTextColor="@color/bottom_nav_item_color" />
+        app:menu="@menu/bottom_nav_menu" app:itemIconTint="@color/bottom_nav_item_color" app:itemTextColor="@color/bottom_nav_item_color" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
