@@ -5,7 +5,6 @@ public class Categoria {
         private String titulo;
         private String descricao;
 
-        // Construtor, Getters e Setters
         public Categoria() {}
 
         public int getId() { return id; }

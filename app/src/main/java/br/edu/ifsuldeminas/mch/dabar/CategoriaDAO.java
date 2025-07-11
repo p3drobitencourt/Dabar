@@ -1,4 +1,3 @@
-// CategoriaDAO.java
 package br.edu.ifsuldeminas.mch.dabar;
 
 import android.content.ContentValues;
@@ -10,17 +9,20 @@ import java.util.List;
 
 public class CategoriaDAO {
 
-    private ResumoDAO resumoDAO; // Usamos para pegar a instância do banco
+    private ResumoDAO resumoDAO; // Usado para ter acesso à instância do banco
     private SQLiteDatabase db;
 
     public CategoriaDAO(Context context) {
+        // Pega a instância do helper principal para acessar o mesmo banco
         resumoDAO = new ResumoDAO(context);
     }
+
     public void adicionarCategoria(Categoria categoria) {
         db = resumoDAO.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("titulo", categoria.getTitulo());
         values.put("descricao", categoria.getDescricao());
+
         db.insert("categorias", null, values);
         db.close();
     }
@@ -44,6 +46,39 @@ public class CategoriaDAO {
         return listaCategorias;
     }
 
+    /**
+     * NOVO MÉTODO: Busca uma única categoria no banco de dados pelo seu ID.
+     * @param id O ID da categoria a ser procurada.
+     * @return Um objeto Categoria se encontrado, ou null se não houver categoria com esse ID.
+     */
+    public Categoria findCategoriaById(int id) {
+        db = resumoDAO.getReadableDatabase();
+        Cursor cursor = db.query("categorias", // Nome da tabela
+                new String[]{"id", "titulo", "descricao"}, // Colunas que queremos buscar
+                "id = ?", // Cláusula WHERE
+                new String[]{String.valueOf(id)}, // Valor para o WHERE
+                null, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            Categoria categoria = new Categoria();
+            categoria.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
+            categoria.setTitulo(cursor.getString(cursor.getColumnIndexOrThrow("titulo")));
+            categoria.setDescricao(cursor.getString(cursor.getColumnIndexOrThrow("descricao")));
+
+            cursor.close();
+            db.close();
+            return categoria;
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+        db.close();
+        // Retorna null se nenhuma categoria for encontrada com o ID especificado
+        return null;
+    }
+
+
     public int atualizarCategoria(Categoria categoria) {
         db = resumoDAO.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -58,10 +93,6 @@ public class CategoriaDAO {
 
     public void deletarCategoria(Categoria categoria) {
         db = resumoDAO.getWritableDatabase();
-        // ATENÇÃO: Primeiro, é preciso lidar com os resumos que usam esta categoria.
-        // A abordagem mais simples é torná-los "sem categoria" (null), mas isso
-        // requer que a coluna 'categoria_id' em 'resumos' possa ser NULA.
-        // Por agora, vamos apenas deletar a categoria.
         db.delete("categorias", "id = ?",
                 new String[]{String.valueOf(categoria.getId())});
         db.close();

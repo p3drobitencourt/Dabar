@@ -46,13 +46,6 @@ public class ResumoDAO extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORIAS);
         onCreate(db);
     }
-
-    // --- MÉTODOS CRUD (Create, Read, Update, Delete) PARA RESUMOS ---
-
-    /**
-     * Adiciona um novo resumo ao banco de dados.
-     * @param resumo O objeto Resumo a ser salvo.
-     */
     public void adicionarResumo(Resumo resumo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -64,11 +57,6 @@ public class ResumoDAO extends SQLiteOpenHelper {
         db.insert(TABLE_RESUMOS, null, values);
         db.close();
     }
-
-    /**
-     * Lista todos os resumos do banco, já com suas respectivas categorias preenchidas.
-     * @return Uma lista de objetos Resumo.
-     */
     public List<Resumo> listarTodosResumos() {
         List<Resumo> listaResumos = new ArrayList<>();
         String selectQuery = "SELECT "
@@ -102,20 +90,12 @@ public class ResumoDAO extends SQLiteOpenHelper {
         return listaResumos;
     }
 
-    /**
-     * Atualiza os dados de um resumo existente no banco de dados.
-     * @param resumo O objeto Resumo com os dados atualizados.
-     * @return O número de linhas afetadas (deve ser 1 se a atualização foi bem-sucedida).
-     */
     public int atualizarResumo(Resumo resumo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("titulo", resumo.getTitulo());
         values.put("descricao", resumo.getDescricao());
         values.put("categoria_id", resumo.getCategoria().getId());
-        // O caminho do áudio geralmente não é alterado, mas poderia ser incluído aqui se necessário.
-
-        // Atualiza a linha onde o ID corresponde ao do resumo passado como parâmetro.
         int rowsAffected = db.update(TABLE_RESUMOS, values, "id = ?",
                 new String[]{String.valueOf(resumo.getId())});
         db.close();
@@ -123,14 +103,8 @@ public class ResumoDAO extends SQLiteOpenHelper {
         return rowsAffected;
     }
 
-    /**
-     * Deleta um resumo do banco de dados com base no seu ID.
-     * @param resumo O objeto Resumo a ser deletado.
-     */
     public void deletarResumo(Resumo resumo) {
         SQLiteDatabase db = this.getWritableDatabase();
-
-        // Deleta a linha onde o ID corresponde ao do resumo.
         db.delete(TABLE_RESUMOS, "id = ?",
                 new String[]{String.valueOf(resumo.getId())});
         db.close();
