@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.util.List;
 
 public class NovoResumoActivity extends AppCompatActivity {
@@ -20,7 +22,8 @@ public class NovoResumoActivity extends AppCompatActivity {
     private EditText editTextDescricao;
     private Spinner spinnerCategoria;
     private Button buttonGravar;
-    private int idCategoriaSelecionada = -1; // Inicia com valor inválido
+    private int idCategoriaSelecionada = -1;
+    private BottomNavigationView bottomNavigation; // Adicionado
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +34,10 @@ public class NovoResumoActivity extends AppCompatActivity {
         editTextDescricao = findViewById(R.id.edit_text_descricao);
         spinnerCategoria = findViewById(R.id.spinner_categoria);
         buttonGravar = findViewById(R.id.btn_gravar_resumo);
+        bottomNavigation = findViewById(R.id.bottom_navigation); // Adicionado
 
-        // Popula o Spinner com as categorias do banco de dados
         carregarCategorias();
+        setupBottomNavigation(); // Adicionado
 
         buttonGravar.setOnClickListener(view -> {
             String titulo = editTextTitulo.getText().toString().trim();
@@ -60,14 +64,12 @@ public class NovoResumoActivity extends AppCompatActivity {
         CategoriaDAO dao = new CategoriaDAO(this);
         List<Categoria> categorias = dao.listarTodasCategorias();
 
-        // Cria um adapter para o Spinner
         ArrayAdapter<Categoria> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item,
                 categorias);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategoria.setAdapter(adapter);
 
-        // Listener para pegar o ID da categoria selecionada
         spinnerCategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -81,6 +83,25 @@ public class NovoResumoActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
                 idCategoriaSelecionada = -1;
             }
+        });
+    }
+
+    // Lógica de navegação adicionada
+    private void setupBottomNavigation() {
+        // Nenhum item selecionado por padrão aqui, pois é uma tela de ação
+        bottomNavigation.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.navigation_home) {
+                startActivity(new Intent(this, MainActivity.class));
+                return true;
+            } else if (itemId == R.id.navigation_library) {
+                startActivity(new Intent(this, BibliotecaActivity.class));
+                return true;
+            } else if (itemId == R.id.navigation_new_category) {
+                startActivity(new Intent(this, NovaCategoriaActivity.class));
+                return true;
+            }
+            return false;
         });
     }
 }
