@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
     <item
-        android:id="@+id/nav_home"
+        android:id="@+id/navigation_home"
         android:icon="@drawable/ic_home"
         android:title="Início" />
 
     <item
-        android:id="@+id/nav_library"
-        android:icon="@android:drawable/ic_dialog_dialer"
-        android:title="Categorias" />
+        android:id="@+id/navigation_library"
+        android:icon="@drawable/ic_menu" android:title="Biblioteca" />
 
     <item
-        android:id="@+id/nav_new_category"
-        android:icon="@android:drawable/ic_menu_add"
-        android:title="Nova Categoria" />
-
+        android:id="@+id/navigation_new_category"
+        android:icon="@drawable/ic_add" android:title="Nova Categoria" />
 </menu>

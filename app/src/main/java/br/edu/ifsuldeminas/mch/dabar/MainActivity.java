@@ -20,10 +20,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Define o layout que o Enrique criou como a view desta Activity
         setContentView(R.layout.activity_main);
 
-        // Mapeia os componentes do layout para podermos usá-los no código
+        // Mapeia os componentes do layout
         btnGravarResumo = findViewById(R.id.btn_gravar_resumo);
         btnBibliotecaResumos = findViewById(R.id.btn_biblioteca_resumos);
         btnGuiaDabar = findViewById(R.id.btn_guia_dabar);
@@ -40,10 +39,8 @@ public class MainActivity extends AppCompatActivity {
         btnGravarResumo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Inicia a Activity para criar um novo resumo (a tela do Luis)
-                // Substitua 'NovoResumo.class' pela classe correta da tela de gravação
-                // startActivity(new Intent(MainActivity.this, NovoResumo.class));
-                Toast.makeText(MainActivity.this, "Abrir tela de gravação...", Toast.LENGTH_SHORT).show();
+                // Inicia a Activity para criar um novo resumo
+                startActivity(new Intent(MainActivity.this, NovoResumoActivity.class));
             }
         });
 
@@ -67,21 +64,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupBottomNavigation() {
-        // Impede que o item "Home" seja selecionável de novo, pois já estamos nela
-        bottomNavigation.setSelectedItemId(R.id.nav_home);
+        // Define o item "Home" como selecionado ao iniciar
+        bottomNavigation.setSelectedItemId(R.id.navigation_home);
 
         bottomNavigation.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
-            if (itemId == R.id.nav_library) {
-                startActivity(new Intent(this, BibliotecaActivity.class));
-                // finish(); // Opcional: fechar a MainActivity ao ir para outra tela
+            if (itemId == R.id.navigation_home) {
+                // Já estamos na tela Home, não faz nada
                 return true;
-            } else if (itemId == R.id.nav_new_category) {
+            } else if (itemId == R.id.navigation_library) {
+                // Vai para a tela da Biblioteca
+                startActivity(new Intent(this, BibliotecaActivity.class));
+                // overridePendingTransition(0, 0); // Opcional: remove a animação de transição
+                return true;
+            } else if (itemId == R.id.navigation_new_category) {
+                // Vai para a tela de Nova Categoria
                 startActivity(new Intent(this, NovaCategoriaActivity.class));
-                // finish();
+                // overridePendingTransition(0, 0); // Opcional: remove a animação de transição
                 return true;
             }
-            // Não faz nada se clicar em Home, pois já estamos aqui
             return false;
         });
     }

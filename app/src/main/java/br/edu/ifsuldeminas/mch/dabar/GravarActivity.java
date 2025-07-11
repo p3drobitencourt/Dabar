@@ -1,37 +1,37 @@
 package br.edu.ifsuldeminas.mch.dabar;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.os.Handler;
-import android.widget.Button;
-import android.widget.TextView;
+import android.os.SystemClock;
+import android.widget.Chronometer;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 public class GravarActivity extends AppCompatActivity {
 
-    // Variáveis para a contagem do tempo
-    private Handler timerHandler = new Handler();
-    private long startTime = 0L;
-    private long duracaoEmMs = 0L;
-
     private boolean isRecording = false;
+    private FrameLayout buttonGravar;
+    private Chronometer chronometer;
 
-    private Button buttonGravar;
-
-    private TextView textView_timer;
-
+    // --- Dados recebidos da tela anterior ---
     private String titulo, descricao;
+    private int idCategoria;
 
-    private int categoriaId;
-
+    // --- Lógica de Gravação ---
     private MediaRecorder mediaRecorder;
     private String caminhoDoArquivoDeAudio = null;
-    private String tempoFormatado = "";
+
+    // --- Constante para o pedido de permissão ---
+    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,20 +40,46 @@ public class GravarActivity extends AppCompatActivity {
 
         titulo = getIntent().getStringExtra("EXTRA_TITULO");
         descricao = getIntent().getStringExtra("EXTRA_DESCRICAO");
-        categoriaId = getIntent().getIntExtra("EXTRA_CATEGORIA", 0);
+        idCategoria = getIntent().getIntExtra("EXTRA_CATEGORIA", -1);
 
-        textView_timer = findViewById(R.id.textView_timer);
+        chronometer = findViewById(R.id.text_timer);
         buttonGravar = findViewById(R.id.buttonGravar);
+
         buttonGravar.setOnClickListener(v -> {
             if (!isRecording) {
-                iniciarGravacao();
-                isRecording = true;
-            }else{
+                verificarPermissaoEGravar();
+            } else {
                 pararGravacao();
-                isRecording = false;
             }
         });
     }
+
+    private void verificarPermissaoEGravar() {
+        // Verifica se a permissão para gravar áudio já foi concedida
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            // Se não foi, solicita a permissão ao usuário
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO_PERMISSION);
+        } else {
+            // Se a permissão já existe, inicia a gravação
+            iniciarGravacao();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
+            // Verifica se o usuário concedeu a permissão
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permissão concedida, pode iniciar a gravação
+                iniciarGravacao();
+            } else {
+                // Permissão negada pelo usuário
+                Toast.makeText(this, "Permissão de áudio negada. Não é possível gravar.", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
     private void iniciarGravacao() {
         caminhoDoArquivoDeAudio = getExternalFilesDir(null).getAbsolutePath() + "/audio_" + System.currentTimeMillis() + ".mp3";
         mediaRecorder = new MediaRecorder();
@@ -62,79 +88,71 @@ public class GravarActivity extends AppCompatActivity {
         mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         mediaRecorder.setOutputFile(caminhoDoArquivoDeAudio);
 
-        // --- INICIA O TIMER ---
-        startTime = System.currentTimeMillis();
-        timerHandler.post(updateTimerRunnable);
-
         try {
             mediaRecorder.prepare();
             mediaRecorder.start();
-            buttonGravar.setBackgroundColor(0xFF18494E);
+            isRecording = true;
+
+            chronometer.setBase(SystemClock.elapsedRealtime());
+            chronometer.start();
+
+            buttonGravar.setBackgroundResource(R.drawable.circle_background_recording);
             Toast.makeText(this, "Gravação iniciada!", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
+            Toast.makeText(this, "Falha ao iniciar gravação.", Toast.LENGTH_SHORT).show();
+            isRecording = false;
         }
     }
 
     private void pararGravacao() {
         if (mediaRecorder != null) {
-            mediaRecorder.stop();
-            mediaRecorder.release();
-            mediaRecorder = null;
-            buttonGravar.setEnabled(false); // Desabilita o botão para evitar cliques duplos
+            try {
+                mediaRecorder.stop();
+                mediaRecorder.release();
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+            } finally {
+                mediaRecorder = null;
+            }
 
-            // --- PARA O TIMER ---
-            timerHandler.removeCallbacks(updateTimerRunnable);
+            isRecording = false;
+            chronometer.stop();
+            buttonGravar.setEnabled(false);
+            buttonGravar.setBackgroundResource(R.drawable.circle_background);
 
-            // AGORA, SALVA AUTOMATICAMENTE
             salvarResumoDefinitivamente();
         }
     }
 
     private void salvarResumoDefinitivamente() {
+        if (titulo == null || idCategoria == -1) {
+            Toast.makeText(this, "Erro: dados do resumo incompletos.", Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
 
         ResumoDAO dao = new ResumoDAO(this);
         Resumo novoResumo = new Resumo();
-
-        CategoriaDAO daoCategoria = new CategoriaDAO(this);
-        //Categoria categoria = daoCategoria.getCategoriaById(categoriaId);
+        Categoria categoria = new Categoria();
+        categoria.setId(idCategoria);
 
         novoResumo.setTitulo(titulo);
         novoResumo.setDescricao(descricao);
-        //novoResumo.setCategoria(categoria);
+        novoResumo.setCategoria(categoria);
         novoResumo.setCaminhoAudio(caminhoDoArquivoDeAudio);
 
         dao.adicionarResumo(novoResumo);
 
         Toast.makeText(this, "Resumo salvo com sucesso!", Toast.LENGTH_LONG).show();
-
         finish();
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        isRecording = false;
-    }
-
-    private Runnable updateTimerRunnable = new Runnable() {
-        @Override
-        public void run() {
-            duracaoEmMs = System.currentTimeMillis() - startTime;
-
-            // Formata os milissegundos para o formato MM:SS
-            tempoFormatado = String.format("%02d:%02d",
-                    TimeUnit.MILLISECONDS.toMinutes(duracaoEmMs),
-                    TimeUnit.MILLISECONDS.toSeconds(duracaoEmMs) -
-                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duracaoEmMs))
-            );
-
-            textView_timer.setText(String.format("Gravando... %s", tempoFormatado));
-
-            // Agenda a próxima execução para daqui a 1 segundo
-            timerHandler.postDelayed(this, 1000);
+    protected void onPause() {
+        super.onPause();
+        if (isRecording) {
+            pararGravacao();
         }
-    };
+    }
 }
-
