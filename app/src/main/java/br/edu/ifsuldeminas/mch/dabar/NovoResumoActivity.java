@@ -77,7 +77,6 @@ public class NovoResumoActivity extends AppCompatActivity {
                 return;
             }
 
-            // Empacota os dados e envia para a próxima tela
             Intent intent = new Intent(NovoResumoActivity.this, GravarActivity.class);
             intent.putExtra("EXTRA_TITULO", titulo);
             intent.putExtra("EXTRA_DESCRICAO", descricao);
