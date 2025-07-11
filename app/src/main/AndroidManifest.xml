@@ -20,6 +20,9 @@
             android:name=".GravarActivity"
             android:exported="false" />
         <activity
+            android:name=".GuiaActivity"
+            android:exported="false" />
+        <activity
             android:name=".NovaCategoriaActivity"
             android:exported="false" />
         <activity
