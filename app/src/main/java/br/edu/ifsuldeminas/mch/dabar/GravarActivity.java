@@ -4,6 +4,7 @@ import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,7 +22,7 @@ public class GravarActivity extends AppCompatActivity {
 
     private boolean isRecording = false;
 
-    private Button buttonGravar;
+    private FrameLayout buttonGravar;
 
     private TextView textView_timer;
 
@@ -42,7 +43,7 @@ public class GravarActivity extends AppCompatActivity {
         descricao = getIntent().getStringExtra("EXTRA_DESCRICAO");
         categoriaId = getIntent().getIntExtra("EXTRA_CATEGORIA", 0);
 
-        textView_timer = findViewById(R.id.textView_timer);
+        textView_timer = findViewById(R.id.text_timer);
         buttonGravar = findViewById(R.id.buttonGravar);
         buttonGravar.setOnClickListener(v -> {
             if (!isRecording) {
