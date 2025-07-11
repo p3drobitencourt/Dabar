@@ -20,16 +20,13 @@
             android:name=".GravarActivity"
             android:exported="false" />
         <activity
-            android:name=".NovaCategoria"
+            android:name=".NovaCategoriaActivity"
             android:exported="false" />
         <activity
             android:name=".BibliotecaActivity"
             android:exported="false" />
         <activity
             android:name=".NovoResumoActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Home"
             android:exported="false" />
         <activity
             android:name=".ListResumosActivity"

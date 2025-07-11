@@ -22,8 +22,6 @@ public class AdapterCategorias extends RecyclerView.Adapter<AdapterCategorias.Vi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Usa o mesmo layout de item do resumo, pois ele já serve bem.
-        // Se quiser um layout diferente, crie 'item_categoria.xml' e mude aqui.
         View view = LayoutInflater.from(context).inflate(R.layout.item_resumo, parent, false);
         return new ViewHolder(view);
     }
@@ -33,9 +31,8 @@ public class AdapterCategorias extends RecyclerView.Adapter<AdapterCategorias.Vi
         Categoria categoria = listaCategorias.get(position);
 
         holder.textViewTitulo.setText(categoria.getTitulo());
-        holder.textViewCategoria.setVisibility(View.GONE); // Esconde o campo de categoria do item
+        holder.textViewCategoria.setVisibility(View.GONE);
 
-        // Mostra a descrição da categoria, se houver
         if (categoria.getDescricao() != null && !categoria.getDescricao().isEmpty()) {
             holder.textViewDescricao.setText(categoria.getDescricao());
             holder.textViewDescricao.setVisibility(View.VISIBLE);
