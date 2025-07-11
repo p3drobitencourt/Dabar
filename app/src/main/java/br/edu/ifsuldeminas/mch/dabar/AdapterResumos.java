@@ -13,6 +13,7 @@ public class AdapterResumos extends RecyclerView.Adapter<AdapterResumos.ViewHold
 
     private List<Resumo> listaResumos;
     private Context context;
+    private int longClickedPosition;
 
     public AdapterResumos(Context context, List<Resumo> listaResumos) {
         this.context = context;
@@ -31,6 +32,13 @@ public class AdapterResumos extends RecyclerView.Adapter<AdapterResumos.ViewHold
         Resumo resumo = listaResumos.get(position);
 
         holder.textViewTitulo.setText(resumo.getTitulo());
+        holder.bind(resumo);
+
+        holder.itemView.setOnLongClickListener(v -> {
+            setLongClickedPosition(holder.getAdapterPosition());
+            return false; // Retornar false permite que o menu de contexto continue a ser criado
+        });
+
 
         if (resumo.getCategoria() != null) {
             holder.textViewCategoria.setText(resumo.getCategoria().getTitulo());
@@ -61,5 +69,36 @@ public class AdapterResumos extends RecyclerView.Adapter<AdapterResumos.ViewHold
             textViewDescricao = itemView.findViewById(R.id.textViewDescricao);
             textViewCategoria = itemView.findViewById(R.id.textViewCategoria);
         }
+
+        public void bind(Resumo resumo) {
+            // Pega os dados do objeto 'resumo' e coloca nas Views
+
+            textViewTitulo.setText(resumo.getTitulo());
+
+            // Verifica se o objeto Categoria não é nulo antes de pegar o nome
+            if (resumo.getCategoria() != null) {
+                textViewCategoria.setText(resumo.getCategoria().getTitulo());
+            } else {
+                textViewCategoria.setText("Sem categoria");
+            }
+
+            /* Formata e exibe a duração do áudio
+            long duracaoMs = resumo.getDuracao();
+            String tempoFormatado = String.format("%02d:%02d",
+                    java.util.concurrent.TimeUnit.MILLISECONDS.toMinutes(duracaoMs),
+                    java.util.concurrent.TimeUnit.MILLISECONDS.toSeconds(duracaoMs) -
+                            java.util.concurrent.TimeUnit.MINUTES.toSeconds(java.util.concurrent.TimeUnit.MILLISECONDS.toMinutes(duracaoMs))
+            );
+            textViewDuracao.setText(tempoFormatado);*/
+        }
+    }
+
+    public int getLongClickedPosition() {
+        return longClickedPosition;
+    }
+
+    public void setLongClickedPosition(int longClickedPosition) {
+        this.longClickedPosition = longClickedPosition;
     }
 }
+
