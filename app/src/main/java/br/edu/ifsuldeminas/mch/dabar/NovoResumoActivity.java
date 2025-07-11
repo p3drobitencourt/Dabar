@@ -2,12 +2,17 @@ package br.edu.ifsuldeminas.mch.dabar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.List;
 
 public class NovoResumoActivity extends AppCompatActivity {
 
@@ -27,39 +32,40 @@ public class NovoResumoActivity extends AppCompatActivity {
         editTextDescricao = findViewById(R.id.edit_text_descricao);
         spinnerCategoria = findViewById(R.id.spinner_categoria);
 
-        //CategoriaDAO dao = new CategoriaDAO(this);
-        //List<Categoria> categorias = dao.obterTodasAsCategorias();
+        CategoriaDAO dao = new CategoriaDAO(this);
+        List<Categoria> categorias = dao.listarTodasCategorias();
 
         // O ArrayAdapter agora é do tipo <Categoria>
-        /*ArrayAdapter<Categoria> adapter = new ArrayAdapter<>(this,
+        ArrayAdapter<Categoria> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item,
                 categorias);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCategoria.setAdapter(adapter);*/
+        spinnerCategoria.setAdapter(adapter);
 
-        /*adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategoria.setAdapter(adapter);
 
         // --- Listener para obter o ID ---
-        spinnerCategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinnerCategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() { // Correction here
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Pega o OBJETO Categoria inteiro que foi selecionado
                 Categoria categoriaSelecionada = (Categoria) parent.getItemAtPosition(position);
 
                 // Extrai e guarda o ID do objeto
-                idCategoriaSelecionada = categoriaSelecionada.getId();
-
-                // Agora você tem o ID! Pode usá-lo quando for salvar o resumo.
+                if (categoriaSelecionada != null) {
+                    idCategoriaSelecionada = categoriaSelecionada.getId();
+                } else {
+                    idCategoriaSelecionada = -1;
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                idCategoriaSelecionada = -1; // Indica que nada foi selecionado
+                idCategoriaSelecionada = -1;
             }
         });
-    }*/
 
         buttonGravar.setOnClickListener(view -> {
             String titulo = editTextTitulo.getText().toString().trim();
