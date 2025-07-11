@@ -13,9 +13,10 @@ public class AdapterResumos extends RecyclerView.Adapter<AdapterResumos.ViewHold
 
     private List<Resumo> listaResumos;
     private Context context;
-    private OnItemClickListener listener; // Interface para o clique
+    private OnItemClickListener listener; // Para o clique simples
+    private int longClickedPosition;      // Para o clique longo (menu)
 
-    // Interface para o evento de clique
+    // Interface para o evento de clique simples
     public interface OnItemClickListener {
         void onItemClick(Resumo resumo);
     }
@@ -36,7 +37,14 @@ public class AdapterResumos extends RecyclerView.Adapter<AdapterResumos.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Resumo resumo = listaResumos.get(position);
-        holder.bind(resumo, listener); // Passa o resumo e o listener
+        // O método bind agora cuida de tudo
+        holder.bind(resumo, listener);
+
+        // Listener para o clique longo, para pegar a posição para o menu
+        holder.itemView.setOnLongClickListener(v -> {
+            setLongClickedPosition(holder.getAdapterPosition());
+            return false; // Retornar false permite que o menu de contexto continue
+        });
     }
 
     @Override
@@ -44,6 +52,16 @@ public class AdapterResumos extends RecyclerView.Adapter<AdapterResumos.ViewHold
         return listaResumos.size();
     }
 
+    // Métodos para o menu de contexto
+    public int getLongClickedPosition() {
+        return longClickedPosition;
+    }
+
+    public void setLongClickedPosition(int longClickedPosition) {
+        this.longClickedPosition = longClickedPosition;
+    }
+
+    // ViewHolder não precisa de mudanças, mas aqui está ele completo para referência
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textViewTitulo;
         TextView textViewDescricao;
@@ -56,7 +74,7 @@ public class AdapterResumos extends RecyclerView.Adapter<AdapterResumos.ViewHold
             textViewCategoria = itemView.findViewById(R.id.textViewCategoria);
         }
 
-        // Método para vincular os dados e o clique
+        // Método para vincular os dados e o clique simples
         public void bind(final Resumo resumo, final OnItemClickListener listener) {
             textViewTitulo.setText(resumo.getTitulo());
 
@@ -73,7 +91,7 @@ public class AdapterResumos extends RecyclerView.Adapter<AdapterResumos.ViewHold
                 textViewDescricao.setVisibility(View.GONE);
             }
 
-            // Configura o clique no item inteiro
+            // Configura o clique simples no item
             itemView.setOnClickListener(v -> listener.onItemClick(resumo));
         }
     }
