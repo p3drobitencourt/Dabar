@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context=".GravarActivity">
+    tools:context=".MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -38,7 +38,11 @@
 
         </androidx.appcompat.widget.Toolbar>
 
+
+
     </com.google.android.material.appbar.AppBarLayout>
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -48,29 +52,26 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <FrameLayout
-            android:id="@+id/buttonGravar"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:background="@drawable/circle_background"
-            android:layout_marginBottom="48dp">
+            android:background="@drawable/circle_background" android:layout_marginBottom="48dp"
+            android:gravity="center">
 
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/ic_microphone"
+                android:src="@drawable/ic_microphone" android:layout_gravity="center"
                 app:tint="@android:color/white"
-                android:layout_gravity="center"
                 android:contentDescription="Gravar" />
         </FrameLayout>
 
-        <Chronometer
+        <TextView
             android:id="@+id/text_timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="00:00:00"
             android:textSize="40sp"
-            android:textColor="#3D9B91"
-            android:fontFamily="sans-serif-light" />
+            android:textColor="#3D9B91" android:fontFamily="sans-serif-light" />
 
     </LinearLayout>
 
@@ -80,8 +81,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@android:color/white"
-        app:menu="@menu/bottom_nav_menu"
-        app:itemIconTint="@color/bottom_nav_item_color"
-        app:itemTextColor="@color/bottom_nav_item_color" />
+        app:menu="@menu/bottom_nav_menu" app:itemIconTint="@color/bottom_nav_item_color" app:itemTextColor="@color/bottom_nav_item_color" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

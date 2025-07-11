@@ -1,13 +1,12 @@
+
 package br.edu.ifsuldeminas.mch.dabar;
 
-import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,25 +22,19 @@ public class ListResumosActivity extends AppCompatActivity {
     private List<Resumo> resumos;
     private MediaPlayer mediaPlayer;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_resumos);
+
         recyclerView = findViewById(R.id.recyclerViewResumos);
         dao = new ResumoDAO(this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        setupRecyclerView();
-    }
-
-    private void setupRecyclerView() {
         resumos = dao.listarTodosResumos();
-        adapter = new AdapterResumos(this, resumos, this::ouvirResumo);
+        adapter = new AdapterResumos(this, resumos);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+
         registerForContextMenu(recyclerView);
     }
 
@@ -52,22 +45,21 @@ public class ListResumosActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
+    public boolean onContextItemSelected(MenuItem item) {
         int position = adapter.getLongClickedPosition();
-        if (position < 0 || position >= resumos.size()) {
-            return super.onContextItemSelected(item);
-        }
         Resumo resumoSelecionado = resumos.get(position);
 
         int itemId = item.getItemId();
-        if (itemId == R.id.menu_ouvir) { //
+        if (itemId == R.id.menu_ouvir) {
             ouvirResumo(resumoSelecionado);
+            Toast.makeText(this, "Ouvindo...", Toast.LENGTH_SHORT).show();
             return true;
-        } else if (itemId == R.id.menu_editar) { //
-            Toast.makeText(this, "Funcionalidade de editar em construção...", Toast.LENGTH_SHORT).show(); //
+        } else if (itemId == R.id.menu_editar) {
+            Toast.makeText(this, "Editando...", Toast.LENGTH_SHORT).show();
             return true;
-        } else if (itemId == R.id.menu_apagar) { //
+        } else if (itemId == R.id.menu_apagar) {
             apagarResumo(resumoSelecionado, position);
+            Toast.makeText(this, "Resumo apagado!", Toast.LENGTH_SHORT).show();
             return true;
         } else {
             return super.onContextItemSelected(item);
@@ -75,49 +67,48 @@ public class ListResumosActivity extends AppCompatActivity {
     }
 
     public void ouvirResumo(Resumo resumo) {
+        // Se já estiver tocando algo, pare e libere os recursos
         if (mediaPlayer != null) {
             mediaPlayer.release();
             mediaPlayer = null;
         }
 
-        String caminhoAudio = resumo.getCaminhoAudio(); //
+        String caminhoAudio = resumo.getCaminhoAudio();
         if (caminhoAudio == null || caminhoAudio.isEmpty()) {
             Toast.makeText(this, "Arquivo de áudio não encontrado.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        mediaPlayer = new MediaPlayer();
-
-        // APRIMORAMENTO: Garante que o som saia pelo canal de mídia
-        AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_MEDIA)
-                .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-                .build();
-        mediaPlayer.setAudioAttributes(audioAttributes);
+        Toast.makeText(this, "Iniciando reprodução...", Toast.LENGTH_SHORT).show();
 
         try {
-            mediaPlayer.setDataSource(caminhoAudio);
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-            Toast.makeText(this, "Tocando resumo...", Toast.LENGTH_SHORT).show();
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setDataSource(caminhoAudio); // Define o arquivo a ser tocado
+            mediaPlayer.prepare(); // Prepara o player
+            mediaPlayer.start();   // Inicia a reprodução
+
+            // Listener para liberar os recursos quando a música acabar
             mediaPlayer.setOnCompletionListener(mp -> {
                 mp.release();
                 mediaPlayer = null;
+                Toast.makeText(ListResumosActivity.this, "Reprodução finalizada.", Toast.LENGTH_SHORT).show();
             });
+
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(this, "Erro ao tentar reproduzir o áudio.", Toast.LENGTH_SHORT).show();
         }
     }
 
+    // Método para apagar (exemplo de como ficaria)
     private void apagarResumo(Resumo resumo, int position) {
-        dao.deletarResumo(resumo); //
+        dao.deletarResumo(resumo);
         resumos.remove(position);
         adapter.notifyItemRemoved(position);
-        adapter.notifyItemRangeChanged(position, resumos.size());
-        Toast.makeText(this, "Resumo apagado!", Toast.LENGTH_SHORT).show(); //
+        Toast.makeText(this, "Resumo apagado!", Toast.LENGTH_SHORT).show();
     }
 
+    // É MUITO IMPORTANTE liberar o MediaPlayer quando a activity for finalizada
     @Override
     protected void onStop() {
         super.onStop();

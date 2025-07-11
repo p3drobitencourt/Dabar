@@ -11,4 +11,5 @@
         <item>Inteligência Artificial</item>
     </string-array>
     <string name="app_name">Dabar</string>
+    <string name="add_new_category_description">Adicionar nova categoria</string>
 </resources>

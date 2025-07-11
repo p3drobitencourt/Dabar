@@ -13,18 +13,11 @@ public class AdapterResumos extends RecyclerView.Adapter<AdapterResumos.ViewHold
 
     private List<Resumo> listaResumos;
     private Context context;
-    private OnItemClickListener listener;
     private int longClickedPosition;
 
-    // Interface para o clique simples
-    public interface OnItemClickListener {
-        void onItemClick(Resumo resumo);
-    }
-
-    public AdapterResumos(Context context, List<Resumo> listaResumos, OnItemClickListener listener) {
+    public AdapterResumos(Context context, List<Resumo> listaResumos) {
         this.context = context;
         this.listaResumos = listaResumos;
-        this.listener = listener;
     }
 
     @NonNull
@@ -37,31 +30,38 @@ public class AdapterResumos extends RecyclerView.Adapter<AdapterResumos.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Resumo resumo = listaResumos.get(position);
-        holder.bind(resumo, listener); // O bind agora cuida de tudo
 
-        // Configura o clique longo para obter a posição para o menu de contexto
+        holder.textViewTitulo.setText(resumo.getTitulo());
+        holder.bind(resumo);
+
         holder.itemView.setOnLongClickListener(v -> {
             setLongClickedPosition(holder.getAdapterPosition());
             return false; // Retornar false permite que o menu de contexto continue a ser criado
         });
+
+
+        if (resumo.getCategoria() != null) {
+            holder.textViewCategoria.setText(resumo.getCategoria().getTitulo());
+        } else {
+            holder.textViewCategoria.setText("Sem categoria");
+        }
+
+        if (resumo.getDescricao() != null && !resumo.getDescricao().isEmpty()) {
+            holder.textViewDescricao.setText(resumo.getDescricao());
+            holder.textViewDescricao.setVisibility(View.VISIBLE);
+        } else {
+            holder.textViewDescricao.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public int getItemCount() {
         return listaResumos.size();
     }
-
-    // Métodos para o menu de contexto que você já tinha
-    public int getLongClickedPosition() {
-        return longClickedPosition;
-    }
-
-    public void setLongClickedPosition(int longClickedPosition) {
-        this.longClickedPosition = longClickedPosition;
-    }
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewTitulo, textViewDescricao, textViewCategoria;
+        TextView textViewTitulo;
+        TextView textViewDescricao;
+        TextView textViewCategoria;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -70,25 +70,35 @@ public class AdapterResumos extends RecyclerView.Adapter<AdapterResumos.ViewHold
             textViewCategoria = itemView.findViewById(R.id.textViewCategoria);
         }
 
-        // Método para vincular os dados e os dois tipos de clique
-        public void bind(final Resumo resumo, final OnItemClickListener listener) {
+        public void bind(Resumo resumo) {
+            // Pega os dados do objeto 'resumo' e coloca nas Views
+
             textViewTitulo.setText(resumo.getTitulo());
 
+            // Verifica se o objeto Categoria não é nulo antes de pegar o nome
             if (resumo.getCategoria() != null) {
                 textViewCategoria.setText(resumo.getCategoria().getTitulo());
             } else {
                 textViewCategoria.setText("Sem categoria");
             }
 
-            if (resumo.getDescricao() != null && !resumo.getDescricao().isEmpty()) {
-                textViewDescricao.setText(resumo.getDescricao());
-                textViewDescricao.setVisibility(View.VISIBLE);
-            } else {
-                textViewDescricao.setVisibility(View.GONE);
-            }
-
-            // Configura o clique simples no item
-            itemView.setOnClickListener(v -> listener.onItemClick(resumo));
+            /* Formata e exibe a duração do áudio
+            long duracaoMs = resumo.getDuracao();
+            String tempoFormatado = String.format("%02d:%02d",
+                    java.util.concurrent.TimeUnit.MILLISECONDS.toMinutes(duracaoMs),
+                    java.util.concurrent.TimeUnit.MILLISECONDS.toSeconds(duracaoMs) -
+                            java.util.concurrent.TimeUnit.MINUTES.toSeconds(java.util.concurrent.TimeUnit.MILLISECONDS.toMinutes(duracaoMs))
+            );
+            textViewDuracao.setText(tempoFormatado);*/
         }
     }
+
+    public int getLongClickedPosition() {
+        return longClickedPosition;
+    }
+
+    public void setLongClickedPosition(int longClickedPosition) {
+        this.longClickedPosition = longClickedPosition;
+    }
 }
+
