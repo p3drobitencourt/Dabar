@@ -1,5 +1,6 @@
 package br.edu.ifsuldeminas.mch.dabar;
 
+import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -26,7 +27,6 @@ public class ListResumosActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_resumos);
-
         recyclerView = findViewById(R.id.recyclerViewResumos);
         dao = new ResumoDAO(this);
     }
@@ -34,22 +34,14 @@ public class ListResumosActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Carrega/recarrega a lista de resumos e configura o RecyclerView
         setupRecyclerView();
     }
 
     private void setupRecyclerView() {
         resumos = dao.listarTodosResumos();
-
-        // Configura o adapter com o listener de clique simples
-        adapter = new AdapterResumos(this, resumos, resumo -> {
-            ouvirResumo(resumo);
-        });
-
+        adapter = new AdapterResumos(this, resumos, this::ouvirResumo);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-
-        // Registra o RecyclerView para o menu de contexto (clique longo)
         registerForContextMenu(recyclerView);
     }
 
@@ -63,18 +55,18 @@ public class ListResumosActivity extends AppCompatActivity {
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         int position = adapter.getLongClickedPosition();
         if (position < 0 || position >= resumos.size()) {
-            return super.onContextItemSelected(item); // Posição inválida
+            return super.onContextItemSelected(item);
         }
         Resumo resumoSelecionado = resumos.get(position);
 
         int itemId = item.getItemId();
-        if (itemId == R.id.menu_ouvir) {
+        if (itemId == R.id.menu_ouvir) { //
             ouvirResumo(resumoSelecionado);
             return true;
-        } else if (itemId == R.id.menu_editar) {
-            Toast.makeText(this, "Funcionalidade de editar em construção...", Toast.LENGTH_SHORT).show();
+        } else if (itemId == R.id.menu_editar) { //
+            Toast.makeText(this, "Funcionalidade de editar em construção...", Toast.LENGTH_SHORT).show(); //
             return true;
-        } else if (itemId == R.id.menu_apagar) {
+        } else if (itemId == R.id.menu_apagar) { //
             apagarResumo(resumoSelecionado, position);
             return true;
         } else {
@@ -88,19 +80,26 @@ public class ListResumosActivity extends AppCompatActivity {
             mediaPlayer = null;
         }
 
-        String caminhoAudio = resumo.getCaminhoAudio();
+        String caminhoAudio = resumo.getCaminhoAudio(); //
         if (caminhoAudio == null || caminhoAudio.isEmpty()) {
             Toast.makeText(this, "Arquivo de áudio não encontrado.", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        mediaPlayer = new MediaPlayer();
+
+        // APRIMORAMENTO: Garante que o som saia pelo canal de mídia
+        AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_MEDIA)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                .build();
+        mediaPlayer.setAudioAttributes(audioAttributes);
+
         try {
-            mediaPlayer = new MediaPlayer();
             mediaPlayer.setDataSource(caminhoAudio);
             mediaPlayer.prepare();
             mediaPlayer.start();
             Toast.makeText(this, "Tocando resumo...", Toast.LENGTH_SHORT).show();
-
             mediaPlayer.setOnCompletionListener(mp -> {
                 mp.release();
                 mediaPlayer = null;
@@ -112,11 +111,11 @@ public class ListResumosActivity extends AppCompatActivity {
     }
 
     private void apagarResumo(Resumo resumo, int position) {
-        dao.deletarResumo(resumo);
+        dao.deletarResumo(resumo); //
         resumos.remove(position);
         adapter.notifyItemRemoved(position);
         adapter.notifyItemRangeChanged(position, resumos.size());
-        Toast.makeText(this, "Resumo apagado!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Resumo apagado!", Toast.LENGTH_SHORT).show(); //
     }
 
     @Override

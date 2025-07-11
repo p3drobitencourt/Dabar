@@ -23,7 +23,7 @@ public class NovoResumoActivity extends AppCompatActivity {
     private Spinner spinnerCategoria;
     private Button buttonGravar;
     private int idCategoriaSelecionada = -1;
-    private BottomNavigationView bottomNavigation; // Adicionado
+    private BottomNavigationView bottomNavigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +34,9 @@ public class NovoResumoActivity extends AppCompatActivity {
         editTextDescricao = findViewById(R.id.edit_text_descricao);
         spinnerCategoria = findViewById(R.id.spinner_categoria);
         buttonGravar = findViewById(R.id.btn_gravar_resumo);
-        bottomNavigation = findViewById(R.id.bottom_navigation); // Adicionado
+        bottomNavigation = findViewById(R.id.bottom_navigation);
 
-        carregarCategorias();
-        setupBottomNavigation(); // Adicionado
+        setupBottomNavigation();
 
         buttonGravar.setOnClickListener(view -> {
             String titulo = editTextTitulo.getText().toString().trim();
@@ -58,6 +57,13 @@ public class NovoResumoActivity extends AppCompatActivity {
             intent.putExtra("EXTRA_CATEGORIA", idCategoriaSelecionada);
             startActivity(intent);
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Aprimoramento: Recarrega as categorias toda vez que a tela fica visível
+        carregarCategorias();
     }
 
     private void carregarCategorias() {
@@ -86,16 +92,15 @@ public class NovoResumoActivity extends AppCompatActivity {
         });
     }
 
-    // Lógica de navegação adicionada
     private void setupBottomNavigation() {
-        // Nenhum item selecionado por padrão aqui, pois é uma tela de ação
+        // Lógica da sua barra de navegação que já está funcionando
         bottomNavigation.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.navigation_home) {
                 startActivity(new Intent(this, MainActivity.class));
                 return true;
             } else if (itemId == R.id.navigation_library) {
-                startActivity(new Intent(this, BibliotecaActivity.class));
+                startActivity(new Intent(this, ListResumosActivity.class));
                 return true;
             } else if (itemId == R.id.navigation_new_category) {
                 startActivity(new Intent(this, NovaCategoriaActivity.class));
