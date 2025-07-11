@@ -1,6 +1,7 @@
 package br.edu.ifsuldeminas.mch.dabar;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -21,16 +22,10 @@ public class GravarActivity extends AppCompatActivity {
     private boolean isRecording = false;
     private FrameLayout buttonGravar;
     private Chronometer chronometer;
-
-    // --- Dados recebidos da tela anterior ---
     private String titulo, descricao;
     private int idCategoria;
-
-    // --- Lógica de Gravação ---
     private MediaRecorder mediaRecorder;
     private String caminhoDoArquivoDeAudio = null;
-
-    // --- Constante para o pedido de permissão ---
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
 
     @Override
@@ -55,12 +50,9 @@ public class GravarActivity extends AppCompatActivity {
     }
 
     private void verificarPermissaoEGravar() {
-        // Verifica se a permissão para gravar áudio já foi concedida
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            // Se não foi, solicita a permissão ao usuário
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO_PERMISSION);
         } else {
-            // Se a permissão já existe, inicia a gravação
             iniciarGravacao();
         }
     }
@@ -69,12 +61,9 @@ public class GravarActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
-            // Verifica se o usuário concedeu a permissão
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permissão concedida, pode iniciar a gravação
                 iniciarGravacao();
             } else {
-                // Permissão negada pelo usuário
                 Toast.makeText(this, "Permissão de áudio negada. Não é possível gravar.", Toast.LENGTH_LONG).show();
             }
         }
@@ -91,22 +80,21 @@ public class GravarActivity extends AppCompatActivity {
         try {
             mediaRecorder.prepare();
             mediaRecorder.start();
+            // Lógica CORRIGIDA: Só define como 'true' se a gravação realmente começar
             isRecording = true;
-
             chronometer.setBase(SystemClock.elapsedRealtime());
             chronometer.start();
-
             buttonGravar.setBackgroundResource(R.drawable.circle_background_recording);
             Toast.makeText(this, "Gravação iniciada!", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             e.printStackTrace();
+            isRecording = false; // Garante que não fique em estado inconsistente
             Toast.makeText(this, "Falha ao iniciar gravação.", Toast.LENGTH_SHORT).show();
-            isRecording = false;
         }
     }
 
     private void pararGravacao() {
-        if (mediaRecorder != null) {
+        if (mediaRecorder != null && isRecording) { // Checagem dupla para segurança
             try {
                 mediaRecorder.stop();
                 mediaRecorder.release();
@@ -115,23 +103,15 @@ public class GravarActivity extends AppCompatActivity {
             } finally {
                 mediaRecorder = null;
             }
-
             isRecording = false;
             chronometer.stop();
             buttonGravar.setEnabled(false);
             buttonGravar.setBackgroundResource(R.drawable.circle_background);
-
             salvarResumoDefinitivamente();
         }
     }
 
     private void salvarResumoDefinitivamente() {
-        if (titulo == null || idCategoria == -1) {
-            Toast.makeText(this, "Erro: dados do resumo incompletos.", Toast.LENGTH_LONG).show();
-            finish();
-            return;
-        }
-
         ResumoDAO dao = new ResumoDAO(this);
         Resumo novoResumo = new Resumo();
         Categoria categoria = new Categoria();
@@ -143,8 +123,11 @@ public class GravarActivity extends AppCompatActivity {
         novoResumo.setCaminhoAudio(caminhoDoArquivoDeAudio);
 
         dao.adicionarResumo(novoResumo);
-
         Toast.makeText(this, "Resumo salvo com sucesso!", Toast.LENGTH_LONG).show();
+
+        Intent intent = new Intent(GravarActivity.this, ListResumosActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
         finish();
     }
 

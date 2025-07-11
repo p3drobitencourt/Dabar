@@ -29,11 +29,21 @@ public class ListResumosActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerViewResumos);
         dao = new ResumoDAO(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Carrega/recarrega a lista de resumos e configura o RecyclerView
+        setupRecyclerView();
+    }
+
+    private void setupRecyclerView() {
         resumos = dao.listarTodosResumos();
 
         // Configura o adapter com o listener de clique simples
         adapter = new AdapterResumos(this, resumos, resumo -> {
-            playAudio(resumo.getCaminhoAudio());
+            ouvirResumo(resumo);
         });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -42,8 +52,6 @@ public class ListResumosActivity extends AppCompatActivity {
         // Registra o RecyclerView para o menu de contexto (clique longo)
         registerForContextMenu(recyclerView);
     }
-
-    // --- Lógica do Menu de Contexto (Clique Longo) ---
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -61,7 +69,7 @@ public class ListResumosActivity extends AppCompatActivity {
 
         int itemId = item.getItemId();
         if (itemId == R.id.menu_ouvir) {
-            playAudio(resumoSelecionado.getCaminhoAudio());
+            ouvirResumo(resumoSelecionado);
             return true;
         } else if (itemId == R.id.menu_editar) {
             Toast.makeText(this, "Funcionalidade de editar em construção...", Toast.LENGTH_SHORT).show();
@@ -74,63 +82,49 @@ public class ListResumosActivity extends AppCompatActivity {
         }
     }
 
-    // --- Lógica das Ações ---
+    public void ouvirResumo(Resumo resumo) {
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
 
-    private void apagarResumo(Resumo resumo, int position) {
-        dao.deletarResumo(resumo);
-        resumos.remove(position);
-        adapter.notifyItemRemoved(position);
-        adapter.notifyItemRangeChanged(position, resumos.size()); // Atualiza as posições
-        Toast.makeText(this, "Resumo apagado!", Toast.LENGTH_SHORT).show();
-    }
-
-    private void playAudio(String path) {
-        if (path == null || path.isEmpty()) {
+        String caminhoAudio = resumo.getCaminhoAudio();
+        if (caminhoAudio == null || caminhoAudio.isEmpty()) {
             Toast.makeText(this, "Arquivo de áudio não encontrado.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        stopAudio(); // Para o áudio anterior, se houver
-
-        mediaPlayer = new MediaPlayer();
         try {
-            mediaPlayer.setDataSource(path);
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setDataSource(caminhoAudio);
             mediaPlayer.prepare();
             mediaPlayer.start();
             Toast.makeText(this, "Tocando resumo...", Toast.LENGTH_SHORT).show();
 
             mediaPlayer.setOnCompletionListener(mp -> {
-                stopAudio();
-                Toast.makeText(ListResumosActivity.this, "Reprodução finalizada.", Toast.LENGTH_SHORT).show();
+                mp.release();
+                mediaPlayer = null;
             });
-
         } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(this, "Não foi possível tocar o áudio.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Erro ao tentar reproduzir o áudio.", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void stopAudio() {
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
+    private void apagarResumo(Resumo resumo, int position) {
+        dao.deletarResumo(resumo);
+        resumos.remove(position);
+        adapter.notifyItemRemoved(position);
+        adapter.notifyItemRangeChanged(position, resumos.size());
+        Toast.makeText(this, "Resumo apagado!", Toast.LENGTH_SHORT).show();
     }
-
-    // --- Ciclo de Vida da Activity ---
 
     @Override
     protected void onStop() {
         super.onStop();
-        stopAudio(); // Garante que o áudio pare se o usuário sair da tela
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Atualiza a lista caso um novo resumo tenha sido adicionado
-        resumos.clear();
-        resumos.addAll(dao.listarTodosResumos());
-        adapter.notifyDataSetChanged();
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
     }
 }

@@ -13,10 +13,10 @@ public class AdapterResumos extends RecyclerView.Adapter<AdapterResumos.ViewHold
 
     private List<Resumo> listaResumos;
     private Context context;
-    private OnItemClickListener listener; // Para o clique simples
-    private int longClickedPosition;      // Para o clique longo (menu)
+    private OnItemClickListener listener;
+    private int longClickedPosition;
 
-    // Interface para o evento de clique simples
+    // Interface para o clique simples
     public interface OnItemClickListener {
         void onItemClick(Resumo resumo);
     }
@@ -37,13 +37,12 @@ public class AdapterResumos extends RecyclerView.Adapter<AdapterResumos.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Resumo resumo = listaResumos.get(position);
-        // O método bind agora cuida de tudo
-        holder.bind(resumo, listener);
+        holder.bind(resumo, listener); // O bind agora cuida de tudo
 
-        // Listener para o clique longo, para pegar a posição para o menu
+        // Configura o clique longo para obter a posição para o menu de contexto
         holder.itemView.setOnLongClickListener(v -> {
             setLongClickedPosition(holder.getAdapterPosition());
-            return false; // Retornar false permite que o menu de contexto continue
+            return false; // Retornar false permite que o menu de contexto continue a ser criado
         });
     }
 
@@ -52,7 +51,7 @@ public class AdapterResumos extends RecyclerView.Adapter<AdapterResumos.ViewHold
         return listaResumos.size();
     }
 
-    // Métodos para o menu de contexto
+    // Métodos para o menu de contexto que você já tinha
     public int getLongClickedPosition() {
         return longClickedPosition;
     }
@@ -61,11 +60,8 @@ public class AdapterResumos extends RecyclerView.Adapter<AdapterResumos.ViewHold
         this.longClickedPosition = longClickedPosition;
     }
 
-    // ViewHolder não precisa de mudanças, mas aqui está ele completo para referência
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewTitulo;
-        TextView textViewDescricao;
-        TextView textViewCategoria;
+        TextView textViewTitulo, textViewDescricao, textViewCategoria;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -74,7 +70,7 @@ public class AdapterResumos extends RecyclerView.Adapter<AdapterResumos.ViewHold
             textViewCategoria = itemView.findViewById(R.id.textViewCategoria);
         }
 
-        // Método para vincular os dados e o clique simples
+        // Método para vincular os dados e os dois tipos de clique
         public void bind(final Resumo resumo, final OnItemClickListener listener) {
             textViewTitulo.setText(resumo.getTitulo());
 
