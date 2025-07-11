@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="passo1" type="id">passo1</item>
+    <item name="passo1_texto" type="id">passo1_texto</item>
+    <item name="passo2" type="id">passo2</item>
+    <item name="passo2_texto" type="id">passo2_texto</item>
+    <item name="passo3" type="id">passo3</item>
+    <item name="passo3_texto" type="id">passo3_texto</item>
+    <item name="passo4" type="id">passo4</item>
+    <item name="passo4_texto" type="id">passo4_texto</item>
+    <item name="passo5" type="id">passo5</item>
+    <item name="passo5_texto" type="id">passo5_texto</item>
+    <item name="significado" type="id">significado</item>
+    <item name="significado_texto" type="id">significado_texto</item>
+    <item name="dicas" type="id">dicas</item>
+    <item name="dicas_texto" type="id">dicas_texto</item>
+</resources>

@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Ação para o guia (pode ser uma nova Activity ou um Dialog)
-                Toast.makeText(MainActivity.this, "Guia em construção!", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MainActivity.this, GuiaActivity.class));
             }
         });
     }
