@@ -10,6 +10,11 @@ public class GuiaActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigation;
 
+    /**
+     * Initializes the activity, sets the content view, and configures the bottom navigation bar.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down, this Bundle contains the data it most recently supplied; otherwise, it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +32,12 @@ public class GuiaActivity extends AppCompatActivity {
         // --- FIM DA CORREÇÃO ---
     }
 
+    /**
+     * Configures the bottom navigation bar to handle item selection and launch corresponding activities.
+     *
+     * Sets the default selected item to "home" and attaches a listener that starts the appropriate activity
+     * when a navigation item is selected.
+     */
     private void setupBottomNavigation() {
         // Agora esta linha não dará erro, pois 'bottomNavigation' foi inicializada
         bottomNavigation.setSelectedItemId(R.id.navigation_home);
