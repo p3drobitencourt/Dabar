@@ -25,6 +25,13 @@ public class NovoResumoActivity extends AppCompatActivity {
     private int idCategoriaSelecionada = -1;
     private BottomNavigationView bottomNavigation;
 
+    /**
+     * Initializes the activity for creating a new summary, setting up UI components, input validation, and navigation.
+     *
+     * Sets the layout, initializes input fields and navigation, and configures the save button to validate user input and launch the summary saving activity with the entered data.
+     *
+     * @param savedInstanceState The previously saved state of the activity, or null if none exists.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +66,11 @@ public class NovoResumoActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Reloads the category list each time the activity becomes visible.
+     *
+     * Ensures that the spinner displays the most up-to-date categories when returning to this screen.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -66,6 +78,11 @@ public class NovoResumoActivity extends AppCompatActivity {
         carregarCategorias();
     }
 
+    /**
+     * Loads all available categories from the database and populates the category spinner.
+     *
+     * Updates the selected category ID when a category is chosen, or resets it if no selection is made.
+     */
     private void carregarCategorias() {
         CategoriaDAO dao = new CategoriaDAO(this);
         List<Categoria> categorias = dao.listarTodasCategorias();
@@ -92,6 +109,9 @@ public class NovoResumoActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Configures the bottom navigation bar to handle navigation item selections and launch the corresponding activities.
+     */
     private void setupBottomNavigation() {
         // Lógica da sua barra de navegação que já está funcionando
         bottomNavigation.setOnItemSelectedListener(item -> {

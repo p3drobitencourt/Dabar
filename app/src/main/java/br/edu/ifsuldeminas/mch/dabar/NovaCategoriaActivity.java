@@ -16,7 +16,11 @@ public class NovaCategoriaActivity extends AppCompatActivity {
     private TextInputEditText editTextDescricao;
     private Button btnCadastrar;
     private CategoriaDAO dao;
-    private BottomNavigationView bottomNavigation; // Adicionado
+    private BottomNavigationView bottomNavigation; /**
+     * Initializes the activity, sets up the user interface components, and configures event listeners for creating a new category and handling bottom navigation actions.
+     *
+     * @param savedInstanceState the previously saved state of the activity, or null if none exists
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +34,9 @@ public class NovaCategoriaActivity extends AppCompatActivity {
         dao = new CategoriaDAO(this);
 
         btnCadastrar.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Handles the click event for the "Cadastrar" button by invoking the method to save a new category.
+             */
             @Override
             public void onClick(View v) {
                 salvarCategoria();
@@ -39,6 +46,11 @@ public class NovaCategoriaActivity extends AppCompatActivity {
         setupBottomNavigation(); // Adicionado
     }
 
+    /**
+     * Validates input fields and attempts to create a new category in the database.
+     *
+     * Shows a toast message if the title is missing or if the operation succeeds or fails. Finishes the activity upon successful creation.
+     */
     private void salvarCategoria() {
         String titulo = editTextTitulo.getText().toString().trim();
         String descricao = editTextDescricao.getText().toString().trim();
@@ -62,7 +74,11 @@ public class NovaCategoriaActivity extends AppCompatActivity {
         }
     }
 
-    // Lógica de navegação adicionada
+    /**
+     * Configures the bottom navigation bar to handle navigation between main, library, and new category activities.
+     *
+     * Sets the current selection to the "new category" item and defines navigation actions for each menu item.
+     */
     private void setupBottomNavigation() {
         bottomNavigation.setSelectedItemId(R.id.navigation_new_category);
 

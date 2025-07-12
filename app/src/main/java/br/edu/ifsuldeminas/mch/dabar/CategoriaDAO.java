@@ -12,11 +12,21 @@ public class CategoriaDAO {
     private ResumoDAO resumoDAO; // Usado para ter acesso à instância do banco
     private SQLiteDatabase db;
 
+    /**
+     * Constructs a CategoriaDAO using the provided context to initialize database access.
+     *
+     * @param context the application context used to obtain the database helper
+     */
     public CategoriaDAO(Context context) {
         // Pega a instância do helper principal para acessar o mesmo banco
         resumoDAO = new ResumoDAO(context);
     }
 
+    /**
+     * Inserts a new category into the "categorias" table using the provided Categoria object's title and description.
+     *
+     * @param categoria the Categoria object containing the title and description to be added
+     */
     public void adicionarCategoria(Categoria categoria) {
         db = resumoDAO.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -27,6 +37,11 @@ public class CategoriaDAO {
         db.close();
     }
 
+    /**
+     * Retrieves all categories from the database.
+     *
+     * @return a list of all Categoria objects stored in the "categorias" table
+     */
     public List<Categoria> listarTodasCategorias() {
         List<Categoria> listaCategorias = new ArrayList<>();
         db = resumoDAO.getReadableDatabase();
@@ -47,9 +62,10 @@ public class CategoriaDAO {
     }
 
     /**
-     * NOVO MÉTODO: Busca uma única categoria no banco de dados pelo seu ID.
-     * @param id O ID da categoria a ser procurada.
-     * @return Um objeto Categoria se encontrado, ou null se não houver categoria com esse ID.
+     * Retrieves a category from the database by its ID.
+     *
+     * @param id the unique identifier of the category to retrieve
+     * @return a Categoria object if found, or null if no category exists with the specified ID
      */
     public Categoria findCategoriaById(int id) {
         db = resumoDAO.getReadableDatabase();
@@ -79,6 +95,12 @@ public class CategoriaDAO {
     }
 
 
+    /**
+     * Updates the title and description of an existing category in the database.
+     *
+     * @param categoria The category object containing the updated information and its unique ID.
+     * @return The number of rows affected by the update operation.
+     */
     public int atualizarCategoria(Categoria categoria) {
         db = resumoDAO.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -91,6 +113,11 @@ public class CategoriaDAO {
         return rowsAffected;
     }
 
+    /**
+     * Deletes the specified category from the "categorias" table in the database.
+     *
+     * @param categoria the category to be deleted
+     */
     public void deletarCategoria(Categoria categoria) {
         db = resumoDAO.getWritableDatabase();
         db.delete("categorias", "id = ?",

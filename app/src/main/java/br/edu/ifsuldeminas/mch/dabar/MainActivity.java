@@ -17,6 +17,11 @@ public class MainActivity extends AppCompatActivity {
     private Button btnGuiaDabar;
     private BottomNavigationView bottomNavigation;
 
+    /**
+     * Initializes the main activity, sets up the user interface, and configures button and bottom navigation listeners.
+     *
+     * @param savedInstanceState The previously saved state of the activity, or null if none exists.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +39,12 @@ public class MainActivity extends AppCompatActivity {
         setupBottomNavigation();
     }
 
+    /**
+     * Sets up click listeners for the main screen buttons to launch their respective activities.
+     *
+     * Configures the "Gravar novo resumo", "Biblioteca de resumos", and "Guia do dabar" buttons to start
+     * NovoResumoActivity, ListResumosActivity, and GuiaActivity, respectively, when clicked.
+     */
     private void setupButtonListeners() {
         // Ação para o botão "Gravar novo resumo"
         btnGravarResumo.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +74,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Configures the bottom navigation bar, setting the default selection and handling navigation item selections to launch the appropriate activities.
+     */
     private void setupBottomNavigation() {
         // Define o item "Home" como selecionado ao iniciar
         bottomNavigation.setSelectedItemId(R.id.navigation_home);
