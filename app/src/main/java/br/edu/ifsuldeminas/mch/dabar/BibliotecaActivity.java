@@ -21,6 +21,11 @@ public class BibliotecaActivity extends AppCompatActivity {
     private List<Categoria> categorias;
     private FloatingActionButton fabNovaCategoria;
 
+    /**
+     * Initializes the activity, sets up the RecyclerView for displaying categories, and configures the floating action button to add new categories.
+     *
+     * @param savedInstanceState The previously saved instance state, or null if none exists.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +50,9 @@ public class BibliotecaActivity extends AppCompatActivity {
         registerForContextMenu(recyclerViewCategorias);
     }
 
+    /**
+     * Refreshes the category list when the activity resumes, updating the RecyclerView and displaying a message if no categories are found.
+     */
     @Override
     protected void onResume() {
         super.onResume();
