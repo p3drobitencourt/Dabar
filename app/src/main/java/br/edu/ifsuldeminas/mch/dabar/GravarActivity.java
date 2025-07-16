@@ -28,6 +28,11 @@ public class GravarActivity extends AppCompatActivity {
     private String caminhoDoArquivoDeAudio = null;
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
 
+    /**
+     * Initializes the activity, sets up UI components, retrieves intent extras, and configures the record button to handle audio recording actions.
+     *
+     * @param savedInstanceState The previously saved state of the activity, or null if none exists.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +54,9 @@ public class GravarActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Checks if the audio recording permission is granted and requests it if necessary; starts recording if permission is already granted.
+     */
     private void verificarPermissaoEGravar() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO_PERMISSION);
@@ -57,6 +65,15 @@ public class GravarActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Handles the result of the audio recording permission request.
+     *
+     * If permission is granted, starts audio recording. If denied, notifies the user that recording is not possible.
+     *
+     * @param requestCode  the request code passed in the permission request
+     * @param permissions  the requested permissions
+     * @param grantResults the grant results for the corresponding permissions
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -69,6 +86,11 @@ public class GravarActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Starts audio recording and updates the UI to reflect the recording state.
+     *
+     * Prepares and starts the MediaRecorder to capture audio from the microphone, saves the audio file to external storage with a timestamped filename, and starts the chronometer. Updates the recording button's appearance and notifies the user. If recording fails to start, displays an error message and ensures the recording state is not set.
+     */
     private void iniciarGravacao() {
         caminhoDoArquivoDeAudio = getExternalFilesDir(null).getAbsolutePath() + "/audio_" + System.currentTimeMillis() + ".mp3";
         mediaRecorder = new MediaRecorder();
@@ -93,6 +115,13 @@ public class GravarActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Stops the ongoing audio recording, releases resources, updates the UI, and saves the recording metadata.
+     *
+     * If a recording is active, this method stops and releases the MediaRecorder, stops the chronometer,
+     * disables the record button, resets its background, and persists the recording information.
+     * Handles potential runtime exceptions during the stop operation.
+     */
     private void pararGravacao() {
         if (mediaRecorder != null && isRecording) { // Checagem dupla para segurança
             try {
@@ -111,6 +140,11 @@ public class GravarActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Saves the recorded audio and its metadata to the database, then navigates to the list of summaries.
+     *
+     * Creates a new summary with the current title, description, category, and audio file path, persists it using the DAO, displays a confirmation message, and returns to the summary list activity.
+     */
     private void salvarResumoDefinitivamente() {
         ResumoDAO dao = new ResumoDAO(this);
         Resumo novoResumo = new Resumo();
@@ -131,6 +165,11 @@ public class GravarActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Handles the activity pause event by stopping audio recording if it is active.
+     *
+     * Ensures that recording is properly stopped and resources are released when the activity is paused.
+     */
     @Override
     protected void onPause() {
         super.onPause();
