@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             } else if (itemId == R.id.navigation_library) {
                 // Abre a tela correta da biblioteca de resumos
-                startActivity(new Intent(this, ListResumosActivity.class));
+                startActivity(new Intent(this, BibliotecaActivity.class));
                 return true;
             } else if (itemId == R.id.navigation_new_category) {
                 // Abre a tela para criar uma nova categoria
