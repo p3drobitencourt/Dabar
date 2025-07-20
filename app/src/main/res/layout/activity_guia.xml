@@ -4,47 +4,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- HEADER FIXO -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/header_layout"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/app_bar"
         android:layout_width="0dp"
-        android:layout_height="78dp"
-        android:background="@android:color/white"
+        android:layout_height="?attr/actionBarSize" android:background="@android:color/white"
+        android:minHeight="?attr/actionBarSize"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <ImageView
-            android:id="@+id/logo_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:contentDescription="Logo Dabar"
-            android:src="@drawable/ic_dabar_logo"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:contentInsetStartWithNavigation="0dp" app:contentInsetEnd="0dp"> <ImageView
+        android:id="@+id/logo_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start" android:layout_marginStart="16dp"
+        android:contentDescription="Logo Dabar"
+        android:src="@drawable/ic_dabar_logo" />
 
         <ImageView
             android:id="@+id/menu_icon"
             android:layout_width="72dp"
             android:layout_height="73dp"
-            android:layout_marginEnd="16dp"
+            android:layout_gravity="end" android:layout_marginEnd="16dp"
             android:contentDescription="Menu"
-            android:src="@drawable/ic_menu"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:src="@drawable/ic_menu" />
 
-    <!-- CONTEÚDO ROLÁVEL -->
+    </androidx.appcompat.widget.Toolbar>
+
     <ScrollView
         android:id="@+id/scroll_content"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
         android:padding="16dp"
-        app:layout_constraintTop_toBottomOf="@id/header_layout"
+        app:layout_constraintTop_toBottomOf="@id/app_bar"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -53,7 +45,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!-- Título -->
             <TextView
                 android:id="@+id/titulo"
                 android:layout_width="0dp"
@@ -66,7 +57,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- Subtítulo -->
             <TextView
                 android:id="@+id/subtitulo"
                 android:layout_width="0dp"
@@ -78,7 +68,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- Passo 1 -->
             <TextView
                 android:id="@+id/passo1"
                 android:layout_width="0dp"
@@ -103,7 +92,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <!-- Passo 2 -->
             <TextView
                 android:id="@+id/passo2"
                 android:layout_width="0dp"
@@ -128,7 +116,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <!-- Passo 3 -->
             <TextView
                 android:id="@+id/passo3"
                 android:layout_width="0dp"
@@ -153,7 +140,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <!-- Passo 4 -->
             <TextView
                 android:id="@+id/passo4"
                 android:layout_width="0dp"
@@ -178,7 +164,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <!-- Passo 5 -->
             <TextView
                 android:id="@+id/passo5"
                 android:layout_width="0dp"
@@ -203,7 +188,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <!-- Significado -->
             <TextView
                 android:id="@+id/significado"
                 android:layout_width="0dp"
@@ -228,7 +212,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <!-- Dicas rápidas -->
             <TextView
                 android:id="@+id/dicas"
                 android:layout_width="0dp"
@@ -257,7 +240,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
-    <!-- BOTTOM NAVIGATION -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="0dp"
