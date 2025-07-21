@@ -11,4 +11,5 @@
         <color name="white">#FFFFFFFF</color>
 
         <color name="dabar_primary_green">#3D9B91</color> <color name="dabar_dark_text">#333333</color>   <color name="dabar_light_gray">#757575</color>  <color name="dabar_background">#F5F5F5</color>
+    <color name="myblack">#323232</color>
 </resources>
