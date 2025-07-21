@@ -1,0 +1,84 @@
+<!-- activity_main.xml -->
+<!-- Este arquivo define o layout visual da tela de entrada, conforme o print. -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".LoginInicio"> <!-- Alterado de .MainActivity para .LoginInicio -->
+
+    <!-- Imagem da ilustração superior -->
+    <!-- Certifique-se de adicionar sua imagem "ilustracao_login.png" na pasta res/drawable -->
+
+    <!-- Logo "dabar" -->
+    <!-- Certifique-se de adicionar sua imagem "logo_dabar.png" na pasta res/drawable -->
+
+    <ImageView
+        android:id="@+id/illustrationImageView"
+        android:layout_width="0dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="56dp"
+        android:contentDescription="Ilustração de pessoas interagindo com um aplicativo de voz"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ilustracao_login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="1.0" />
+
+    <!-- Botão "Entrar" -->
+
+    <!-- Botão "Cadastrar-me" -->
+
+    <ImageView
+        android:id="@+id/logoImageView"
+        android:layout_width="247dp"
+        android:layout_height="128dp"
+        android:layout_marginTop="36dp"
+        android:contentDescription="Logo da marca Dabar"
+        android:src="@drawable/ic_dabar_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/illustrationImageView" />
+
+    <Button
+        android:id="@+id/enterButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="12dp"
+        android:backgroundTint="#38A169"
+        android:paddingVertical="14dp"
+        android:text="Entrar"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        app:cornerRadius="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/registerButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/registerButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="72dp"
+        android:backgroundTint="@android:color/transparent"
+        android:paddingVertical="14dp"
+        android:text="Cadastrar-me"
+        android:textColor="#38A169"
+        android:textSize="18sp"
+        app:cornerRadius="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="#38A169"
+        app:strokeWidth="2dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
