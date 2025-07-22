@@ -25,7 +25,7 @@ public class SplashActivity extends AppCompatActivity {
 
         // Se não houver usuário logado, vá para a tela de login.
         if (currentUser == null) {
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(this, LoginInicioActivity.class));
         } else {
             // Se houver um usuário logado, vá para a tela principal.
             startActivity(new Intent(this, MainActivity.class));

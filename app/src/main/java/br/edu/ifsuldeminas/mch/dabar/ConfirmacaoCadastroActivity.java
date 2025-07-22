@@ -7,19 +7,22 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class ConfirmacaoCadastroActivity extends AppCompatActivity {
 
-    private Button buttonVoltarLogin;
+    private Button btnFazerLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirmacao_cadastro);
 
-        // IMPORTANTE: Use o ID do seu botão no activity_confirmacao_cadastro.xml
-        buttonVoltarLogin = findViewById(R.id.id_do_seu_botao_de_voltar);
+        // Conecta a variável Java com o ID do seu XML.
+        btnFazerLogin = findViewById(R.id.btn_fazer_login);
 
-        buttonVoltarLogin.setOnClickListener(v -> {
-            startActivity(new Intent(ConfirmacaoCadastroActivity.this, LoginActivity.class));
-            finish();
+        btnFazerLogin.setOnClickListener(v -> {
+            // Envia o usuário de volta para a tela de login inicial.
+            Intent intent = new Intent(ConfirmacaoCadastroActivity.this, LoginInicioActivity.class);
+            // Limpa o histórico de telas para que o usuário não volte para a confirmação.
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
         });
     }
 }
