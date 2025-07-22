@@ -18,7 +18,7 @@ import java.util.List;
 // --- IMPORTAÇÕES DO ROOM ---
 import br.edu.ifsuldeminas.mch.dabar.ResumoDAO;
 import br.edu.ifsuldeminas.mch.dabar.CategoriaDAO;
-import br.edu.ifsuldeminas.mch.dabar..AppDatabase;
+import br.edu.ifsuldeminas.mch.dabar.AppDatabase;
 
 public class ListResumosActivity extends AppCompatActivity {
 

@@ -2,7 +2,6 @@ package br.edu.ifsuldeminas.mch.dabar;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,7 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 
-// --- IMPORTAÇÕES DO ROOM ---
+// --- IMPORTAÇÕES CORRIGIDAS DO ROOM ---
+// Apontando para os pacotes corretos que criamos
 import br.edu.ifsuldeminas.mch.dabar.CategoriaDAO;
 import br.edu.ifsuldeminas.mch.dabar.AppDatabase;
 
@@ -21,8 +21,8 @@ public class NovaCategoriaActivity extends AppCompatActivity {
     private Button btnCadastrar;
     private BottomNavigationView bottomNavigation;
 
-    // --- DAO DO ROOM ---
-    // Substituímos a implementação antiga pela interface do Room.
+    // --- DAO DO ROOM CORRIGIDO ---
+    // A variável agora usa a interface CategoriaDao que criamos.
     private CategoriaDAO categoriaDao;
 
     @Override
@@ -30,13 +30,13 @@ public class NovaCategoriaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nova_categoria);
 
+        // Agora o Java vai encontrar esses IDs no XML corrigido.
         editTextTitulo = findViewById(R.id.edit_text_titulo_categoria);
         editTextDescricao = findViewById(R.id.edit_text_descricao_categoria);
         btnCadastrar = findViewById(R.id.btn_cadastrar_categoria);
         bottomNavigation = findViewById(R.id.bottom_navigation);
 
-        // --- INICIALIZAÇÃO DO DAO DO ROOM ---
-        // Em vez de 'new CategoriaDAO(this)', obtemos o DAO através da classe AppDatabase.
+        // --- INICIALIZAÇÃO CORRETA DO DAO DO ROOM ---
         categoriaDao = AppDatabase.getDatabase(this).categoriaDao();
 
         btnCadastrar.setOnClickListener(v -> salvarCategoria());
@@ -59,10 +59,9 @@ public class NovaCategoriaActivity extends AppCompatActivity {
 
         try {
             // --- USO DO DAO DO ROOM ---
-            // A chamada do método é a mesma, mas agora ela executa o código gerado pelo Room.
             categoriaDao.adicionarCategoria(novaCategoria);
             Toast.makeText(this, "Categoria cadastrada com sucesso!", Toast.LENGTH_SHORT).show();
-            finish(); // Fecha a activity e volta para a anterior
+            finish();
         } catch (Exception e) {
             Toast.makeText(this, "Erro ao cadastrar categoria.", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
@@ -81,7 +80,7 @@ public class NovaCategoriaActivity extends AppCompatActivity {
                 startActivity(new Intent(this, BibliotecaActivity.class));
                 return true;
             } else if (itemId == R.id.navigation_new_category) {
-                return true; // Já estamos aqui
+                return true;
             }
             return false;
         });

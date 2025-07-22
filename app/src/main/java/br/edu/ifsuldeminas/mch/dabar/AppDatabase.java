@@ -7,8 +7,8 @@ import androidx.room.RoomDatabase;
 
 import br.edu.ifsuldeminas.mch.dabar.Categoria;
 import br.edu.ifsuldeminas.mch.dabar.Resumo;
-import br.edu.ifsuldeminas.mch.dabar.dao.CategoriaDao;
-import br.edu.ifsuldeminas.mch.dabar.dao.ResumoDao;
+import br.edu.ifsuldeminas.mch.dabar.CategoriaDAO;
+import br.edu.ifsuldeminas.mch.dabar.ResumoDAO;
 
 /**
  * A classe principal do banco de dados Room.
@@ -22,8 +22,8 @@ import br.edu.ifsuldeminas.mch.dabar.dao.ResumoDao;
 public abstract class AppDatabase extends RoomDatabase {
 
     // Métodos abstratos para que o Room forneça a implementação dos DAOs.
-    public abstract CategoriaDao categoriaDao();
-    public abstract ResumoDao resumoDao();
+    public abstract CategoriaDAO categoriaDao();
+    public abstract ResumoDAO resumoDao();
 
     // A palavra 'volatile' garante que a variável INSTANCE seja sempre lida da memória principal,
     // o que é importante para a segurança em ambientes com múltiplas threads.
