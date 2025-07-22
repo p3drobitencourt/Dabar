@@ -13,19 +13,20 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
+// --- IMPORTAÇÕES DO ROOM ---
+import br.edu.ifsuldeminas.mch.dabar.CategoriaDAO;
+import br.edu.ifsuldeminas.mch.dabar.AppDatabase;
+
 public class BibliotecaActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewCategorias;
     private AdapterCategorias adapter;
-    private CategoriaDAO dao;
     private List<Categoria> categorias;
     private FloatingActionButton fabNovaCategoria;
 
-    /**
-     * Initializes the activity, sets up the RecyclerView for displaying categories, and configures the floating action button to add new categories.
-     *
-     * @param savedInstanceState The previously saved instance state, or null if none exists.
-     */
+    // --- DAO DO ROOM ---
+    private CategoriaDAO categoriaDao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,36 +35,40 @@ public class BibliotecaActivity extends AppCompatActivity {
         recyclerViewCategorias = findViewById(R.id.recyclerViewCategorias);
         fabNovaCategoria = findViewById(R.id.fab_nova_categoria);
 
-        dao = new CategoriaDAO(this);
-        categorias = dao.listarTodasCategorias();
+        // --- INICIALIZAÇÃO DO DAO ---
+        categoriaDao = AppDatabase.getDatabase(this).categoriaDao();
 
-        adapter = new AdapterCategorias(this, categorias);
-        recyclerViewCategorias.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewCategorias.setAdapter(adapter);
-        fabNovaCategoria.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(BibliotecaActivity.this, NovaCategoriaActivity.class));
-            }
-        });
+        // A busca inicial dos dados pode ser movida para o onResume para garantir
+        // que a lista seja sempre atualizada.
+
+        fabNovaCategoria.setOnClickListener(v ->
+                startActivity(new Intent(BibliotecaActivity.this, NovaCategoriaActivity.class))
+        );
 
         registerForContextMenu(recyclerViewCategorias);
     }
 
-    /**
-     * Refreshes the category list when the activity resumes, updating the RecyclerView and displaying a message if no categories are found.
-     */
     @Override
     protected void onResume() {
         super.onResume();
+        carregarCategorias();
+    }
 
-        if (dao != null && adapter != null) {
-            categorias.clear();
-            categorias.addAll(dao.listarTodasCategorias());
-            adapter.notifyDataSetChanged();
-            if (categorias.isEmpty()) {
-                Toast.makeText(this, "Nenhuma categoria encontrada. Crie uma nova!", Toast.LENGTH_SHORT).show();
-            }
+    private void carregarCategorias() {
+        // --- USO DO DAO DO ROOM ---
+        categorias = categoriaDao.listarTodasCategorias();
+
+        if (adapter == null) {
+            adapter = new AdapterCategorias(this, categorias);
+            recyclerViewCategorias.setLayoutManager(new LinearLayoutManager(this));
+            recyclerViewCategorias.setAdapter(adapter);
+        } else {
+            // Se o adapter já existe, apenas atualiza a lista e notifica as mudanças.
+            adapter.atualizarLista(categorias);
+        }
+
+        if (categorias.isEmpty()) {
+            Toast.makeText(this, "Nenhuma categoria encontrada. Crie uma nova!", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -1,112 +1,55 @@
 package br.edu.ifsuldeminas.mch.dabar;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-
-import java.util.ArrayList;
+import androidx.room.Dao;
+import androidx.room.Delete;
+import androidx.room.Insert;
+import androidx.room.Query;
+import androidx.room.Update;
 import java.util.List;
+import br.edu.ifsuldeminas.mch.dabar.Resumo;
 
-public class ResumoDAO extends SQLiteOpenHelper {
+/**
+ * Data Access Object (DAO) para a entidade Resumo.
+ * Define os métodos para interagir com a tabela 'resumos' no banco de dados.
+ */
+@Dao
+public interface ResumoDAO {
 
-    private static final int DATABASE_VERSION = 2;
-    private static final String DATABASE_NAME = "dabar.db";
+    /**
+     * Insere um novo resumo no banco de dados.
+     * @param resumo O objeto Resumo a ser inserido.
+     */
+    @Insert
+    void adicionarResumo(Resumo resumo);
 
-    private static final String TABLE_RESUMOS = "resumos";
-    private static final String TABLE_CATEGORIAS = "categorias";
+    /**
+     * Atualiza um resumo existente. O Room usa a chave primária para encontrar o registro.
+     * @param resumo O objeto Resumo com os dados atualizados.
+     */
+    @Update
+    void atualizarResumo(Resumo resumo);
 
-    public ResumoDAO(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
+    /**
+     * Deleta um resumo do banco de dados.
+     * @param resumo O objeto Resumo a ser deletado.
+     */
+    @Delete
+    void deletarResumo(Resumo resumo);
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        String CREATE_CATEGORias_TABLE = "CREATE TABLE " + TABLE_CATEGORIAS + "("
-                + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + "titulo TEXT,"
-                + "descricao TEXT" + ")";
+    /**
+     * Busca e retorna todos os resumos do banco, ordenados por título.
+     * Note: Esta query retorna objetos Resumo sem o campo 'categoria' preenchido.
+     * Você precisará buscar a categoria separadamente usando o 'categoriaId'.
+     * @return Uma lista com todos os objetos Resumo.
+     */
+    @Query("SELECT * FROM resumos ORDER BY titulo ASC")
+    List<Resumo> listarTodosResumos();
 
-        String CREATE_RESUMOS_TABLE = "CREATE TABLE " + TABLE_RESUMOS + "("
-                + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + "titulo TEXT,"
-                + "descricao TEXT,"
-                + "caminho_audio TEXT,"
-                + "categoria_id INTEGER,"
-                + "FOREIGN KEY(categoria_id) REFERENCES categorias(id)" + ")";
-
-        db.execSQL(CREATE_CATEGORias_TABLE);
-        db.execSQL(CREATE_RESUMOS_TABLE);
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_RESUMOS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORIAS);
-        onCreate(db);
-    }
-    public void adicionarResumo(Resumo resumo) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("titulo", resumo.getTitulo());
-        values.put("descricao", resumo.getDescricao());
-        values.put("caminho_audio", resumo.getCaminhoAudio());
-        values.put("categoria_id", resumo.getCategoria().getId());
-
-        db.insert(TABLE_RESUMOS, null, values);
-        db.close();
-    }
-    public List<Resumo> listarTodosResumos() {
-        List<Resumo> listaResumos = new ArrayList<>();
-        String selectQuery = "SELECT "
-                + "r.id as resumo_id, r.titulo as resumo_titulo, r.descricao as resumo_descricao, r.caminho_audio, "
-                + "c.id as categoria_id, c.titulo as categoria_titulo, c.descricao as categoria_descricao "
-                + "FROM " + TABLE_RESUMOS + " r "
-                + "INNER JOIN " + TABLE_CATEGORIAS + " c ON r.categoria_id = c.id";
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                Categoria categoria = new Categoria();
-                categoria.setId(cursor.getInt(cursor.getColumnIndexOrThrow("categoria_id")));
-                categoria.setTitulo(cursor.getString(cursor.getColumnIndexOrThrow("categoria_titulo")));
-                categoria.setDescricao(cursor.getString(cursor.getColumnIndexOrThrow("categoria_descricao")));
-
-                Resumo resumo = new Resumo();
-                resumo.setId(cursor.getInt(cursor.getColumnIndexOrThrow("resumo_id")));
-                resumo.setTitulo(cursor.getString(cursor.getColumnIndexOrThrow("resumo_titulo")));
-                resumo.setDescricao(cursor.getString(cursor.getColumnIndexOrThrow("resumo_descricao")));
-                resumo.setCaminhoAudio(cursor.getString(cursor.getColumnIndexOrThrow("caminho_audio")));
-                resumo.setCategoria(categoria);
-
-                listaResumos.add(resumo);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        db.close();
-        return listaResumos;
-    }
-
-    public int atualizarResumo(Resumo resumo) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("titulo", resumo.getTitulo());
-        values.put("descricao", resumo.getDescricao());
-        values.put("categoria_id", resumo.getCategoria().getId());
-        int rowsAffected = db.update(TABLE_RESUMOS, values, "id = ?",
-                new String[]{String.valueOf(resumo.getId())});
-        db.close();
-
-        return rowsAffected;
-    }
-
-    public void deletarResumo(Resumo resumo) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_RESUMOS, "id = ?",
-                new String[]{String.valueOf(resumo.getId())});
-        db.close();
-    }
+    /**
+     * Busca um único resumo pelo seu ID.
+     * @param id O ID do resumo a ser procurado.
+     * @return O objeto Resumo correspondente ou null se não for encontrado.
+     */
+    @Query("SELECT * FROM resumos WHERE id = :id LIMIT 1")
+    Resumo findResumoById(int id);
 }

@@ -10,17 +10,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 
+// --- IMPORTAÇÕES DO ROOM ---
+import br.edu.ifsuldeminas.mch.dabar.CategoriaDAO;
+import br.edu.ifsuldeminas.mch.dabar.AppDatabase;
+
 public class NovaCategoriaActivity extends AppCompatActivity {
 
     private TextInputEditText editTextTitulo;
     private TextInputEditText editTextDescricao;
     private Button btnCadastrar;
-    private CategoriaDAO dao;
-    private BottomNavigationView bottomNavigation; /**
-     * Initializes the activity, sets up the user interface components, and configures event listeners for creating a new category and handling bottom navigation actions.
-     *
-     * @param savedInstanceState the previously saved state of the activity, or null if none exists
-     */
+    private BottomNavigationView bottomNavigation;
+
+    // --- DAO DO ROOM ---
+    // Substituímos a implementação antiga pela interface do Room.
+    private CategoriaDAO categoriaDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,27 +33,17 @@ public class NovaCategoriaActivity extends AppCompatActivity {
         editTextTitulo = findViewById(R.id.edit_text_titulo_categoria);
         editTextDescricao = findViewById(R.id.edit_text_descricao_categoria);
         btnCadastrar = findViewById(R.id.btn_cadastrar_categoria);
-        bottomNavigation = findViewById(R.id.bottom_navigation); // Adicionado
-        dao = new CategoriaDAO(this);
+        bottomNavigation = findViewById(R.id.bottom_navigation);
 
-        btnCadastrar.setOnClickListener(new View.OnClickListener() {
-            /**
-             * Handles the click event for the "Cadastrar" button by invoking the method to save a new category.
-             */
-            @Override
-            public void onClick(View v) {
-                salvarCategoria();
-            }
-        });
+        // --- INICIALIZAÇÃO DO DAO DO ROOM ---
+        // Em vez de 'new CategoriaDAO(this)', obtemos o DAO através da classe AppDatabase.
+        categoriaDao = AppDatabase.getDatabase(this).categoriaDao();
 
-        setupBottomNavigation(); // Adicionado
+        btnCadastrar.setOnClickListener(v -> salvarCategoria());
+
+        setupBottomNavigation();
     }
 
-    /**
-     * Validates input fields and attempts to create a new category in the database.
-     *
-     * Shows a toast message if the title is missing or if the operation succeeds or fails. Finishes the activity upon successful creation.
-     */
     private void salvarCategoria() {
         String titulo = editTextTitulo.getText().toString().trim();
         String descricao = editTextDescricao.getText().toString().trim();
@@ -65,20 +58,17 @@ public class NovaCategoriaActivity extends AppCompatActivity {
         novaCategoria.setDescricao(descricao);
 
         try {
-            dao.adicionarCategoria(novaCategoria);
+            // --- USO DO DAO DO ROOM ---
+            // A chamada do método é a mesma, mas agora ela executa o código gerado pelo Room.
+            categoriaDao.adicionarCategoria(novaCategoria);
             Toast.makeText(this, "Categoria cadastrada com sucesso!", Toast.LENGTH_SHORT).show();
-            finish();
+            finish(); // Fecha a activity e volta para a anterior
         } catch (Exception e) {
             Toast.makeText(this, "Erro ao cadastrar categoria.", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }
 
-    /**
-     * Configures the bottom navigation bar to handle navigation between main, library, and new category activities.
-     *
-     * Sets the current selection to the "new category" item and defines navigation actions for each menu item.
-     */
     private void setupBottomNavigation() {
         bottomNavigation.setSelectedItemId(R.id.navigation_new_category);
 
@@ -91,8 +81,7 @@ public class NovaCategoriaActivity extends AppCompatActivity {
                 startActivity(new Intent(this, BibliotecaActivity.class));
                 return true;
             } else if (itemId == R.id.navigation_new_category) {
-                // Já estamos aqui
-                return true;
+                return true; // Já estamos aqui
             }
             return false;
         });

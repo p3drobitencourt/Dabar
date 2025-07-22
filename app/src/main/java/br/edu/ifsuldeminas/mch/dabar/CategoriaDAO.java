@@ -1,127 +1,55 @@
 package br.edu.ifsuldeminas.mch.dabar;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import java.util.ArrayList;
+import androidx.room.Dao;
+import androidx.room.Delete;
+import androidx.room.Insert;
+import androidx.room.Query;
+import androidx.room.Update;
 import java.util.List;
+import br.edu.ifsuldeminas.mch.dabar.Categoria;
 
-public class CategoriaDAO {
-
-    private ResumoDAO resumoDAO; // Usado para ter acesso à instância do banco
-    private SQLiteDatabase db;
-
-    /**
-     * Constructs a CategoriaDAO using the provided context to initialize database access.
-     *
-     * @param context the application context used to obtain the database helper
-     */
-    public CategoriaDAO(Context context) {
-        // Pega a instância do helper principal para acessar o mesmo banco
-        resumoDAO = new ResumoDAO(context);
-    }
+/**
+ * Data Access Object (DAO) para a entidade Categoria.
+ * O Room usa esta interface para gerar o código de acesso ao banco de dados.
+ * Você define as operações do banco com anotações, sem escrever SQL manualmente (exceto para queries).
+ */
+@Dao
+public interface CategoriaDAO {
 
     /**
-     * Inserts a new category into the "categorias" table using the provided Categoria object's title and description.
-     *
-     * @param categoria the Categoria object containing the title and description to be added
+     * Insere uma nova categoria no banco de dados.
+     * @param categoria O objeto Categoria a ser inserido.
      */
-    public void adicionarCategoria(Categoria categoria) {
-        db = resumoDAO.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("titulo", categoria.getTitulo());
-        values.put("descricao", categoria.getDescricao());
-
-        db.insert("categorias", null, values);
-        db.close();
-    }
+    @Insert
+    void adicionarCategoria(Categoria categoria);
 
     /**
-     * Retrieves all categories from the database.
-     *
-     * @return a list of all Categoria objects stored in the "categorias" table
+     * Atualiza uma categoria existente no banco de dados.
+     * O Room identifica a categoria a ser atualizada pela sua chave primária (id).
+     * @param categoria O objeto Categoria com os dados atualizados.
      */
-    public List<Categoria> listarTodasCategorias() {
-        List<Categoria> listaCategorias = new ArrayList<>();
-        db = resumoDAO.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM categorias", null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                Categoria categoria = new Categoria();
-                categoria.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
-                categoria.setTitulo(cursor.getString(cursor.getColumnIndexOrThrow("titulo")));
-                categoria.setDescricao(cursor.getString(cursor.getColumnIndexOrThrow("descricao")));
-                listaCategorias.add(categoria);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        db.close();
-        return listaCategorias;
-    }
+    @Update
+    void atualizarCategoria(Categoria categoria);
 
     /**
-     * Retrieves a category from the database by its ID.
-     *
-     * @param id the unique identifier of the category to retrieve
-     * @return a Categoria object if found, or null if no category exists with the specified ID
+     * Deleta uma categoria do banco de dados.
+     * @param categoria O objeto Categoria a ser deletado.
      */
-    public Categoria findCategoriaById(int id) {
-        db = resumoDAO.getReadableDatabase();
-        Cursor cursor = db.query("categorias", // Nome da tabela
-                new String[]{"id", "titulo", "descricao"}, // Colunas que queremos buscar
-                "id = ?", // Cláusula WHERE
-                new String[]{String.valueOf(id)}, // Valor para o WHERE
-                null, null, null, null);
-
-        if (cursor != null && cursor.moveToFirst()) {
-            Categoria categoria = new Categoria();
-            categoria.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
-            categoria.setTitulo(cursor.getString(cursor.getColumnIndexOrThrow("titulo")));
-            categoria.setDescricao(cursor.getString(cursor.getColumnIndexOrThrow("descricao")));
-
-            cursor.close();
-            db.close();
-            return categoria;
-        }
-
-        if (cursor != null) {
-            cursor.close();
-        }
-        db.close();
-        // Retorna null se nenhuma categoria for encontrada com o ID especificado
-        return null;
-    }
-
+    @Delete
+    void deletarCategoria(Categoria categoria);
 
     /**
-     * Updates the title and description of an existing category in the database.
-     *
-     * @param categoria The category object containing the updated information and its unique ID.
-     * @return The number of rows affected by the update operation.
+     * Busca e retorna todas as categorias da tabela, ordenadas pelo título.
+     * @return Uma lista de todos os objetos Categoria.
      */
-    public int atualizarCategoria(Categoria categoria) {
-        db = resumoDAO.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("titulo", categoria.getTitulo());
-        values.put("descricao", categoria.getDescricao());
-
-        int rowsAffected = db.update("categorias", values, "id = ?",
-                new String[]{String.valueOf(categoria.getId())});
-        db.close();
-        return rowsAffected;
-    }
+    @Query("SELECT * FROM categorias ORDER BY titulo ASC")
+    List<Categoria> listarTodasCategorias();
 
     /**
-     * Deletes the specified category from the "categorias" table in the database.
-     *
-     * @param categoria the category to be deleted
+     * Busca uma única categoria pelo seu ID.
+     * @param id O ID da categoria a ser procurada.
+     * @return O objeto Categoria correspondente ou null se não for encontrado.
      */
-    public void deletarCategoria(Categoria categoria) {
-        db = resumoDAO.getWritableDatabase();
-        db.delete("categorias", "id = ?",
-                new String[]{String.valueOf(categoria.getId())});
-        db.close();
-    }
+    @Query("SELECT * FROM categorias WHERE id = :id LIMIT 1")
+    Categoria findCategoriaById(int id);
 }

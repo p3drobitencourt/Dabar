@@ -15,69 +15,74 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.IOException;
 import java.util.List;
 
+// --- IMPORTAÇÕES DO ROOM ---
+import br.edu.ifsuldeminas.mch.dabar.ResumoDAO;
+import br.edu.ifsuldeminas.mch.dabar.CategoriaDAO;
+import br.edu.ifsuldeminas.mch.dabar..AppDatabase;
+
 public class ListResumosActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private AdapterResumos adapter;
-    private ResumoDAO dao;
     private List<Resumo> resumos;
     private MediaPlayer mediaPlayer;
 
-    /**
-     * Initializes the activity, sets the layout, and prepares the RecyclerView and data access object for displaying resumos.
-     *
-     * @param savedInstanceState the previously saved state of the activity, or null if none exists
-     */
+    // --- DAOs DO ROOM ---
+    private ResumoDAO resumoDao;
+    private CategoriaDAO categoriaDao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_resumos);
         recyclerView = findViewById(R.id.recyclerViewResumos);
-        dao = new ResumoDAO(this);
+
+        // --- INICIALIZAÇÃO DOS DAOs ---
+        AppDatabase db = AppDatabase.getDatabase(this);
+        resumoDao = db.resumoDao();
+        categoriaDao = db.categoriaDao();
     }
 
-    /**
-     * Refreshes and displays the list of resumos when the activity resumes.
-     */
     @Override
     protected void onResume() {
         super.onResume();
         setupRecyclerView();
     }
 
-    /**
-     * Initializes and configures the RecyclerView to display the current list of resumos.
-     *
-     * Retrieves all resumos from the data source, sets up the adapter with audio playback support,
-     * applies a linear layout manager, and registers the RecyclerView for context menu actions.
-     */
     private void setupRecyclerView() {
-        resumos = dao.listarTodosResumos();
+        // 1. Busca todos os resumos do banco.
+        resumos = resumoDao.listarTodosResumos();
+
+        // 2. Para cada resumo, busca e associa sua respectiva categoria.
+        for (Resumo resumo : resumos) {
+            Categoria categoria = categoriaDao.findCategoriaById(resumo.getCategoriaId());
+            resumo.setCategoria(categoria);
+        }
+
+        // 3. Configura o adapter com a lista completa.
         adapter = new AdapterResumos(this, resumos, this::ouvirResumo);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         registerForContextMenu(recyclerView);
     }
 
-    /**
-     * Inflates the context menu for a resumo item when the context menu is created.
-     *
-     * @param menu      the context menu to be built
-     * @param v         the view for which the context menu is being built
-     * @param menuInfo  additional information about the context menu
-     */
+    private void apagarResumo(Resumo resumo, int position) {
+        // --- USO DO DAO DO ROOM ---
+        resumoDao.deletarResumo(resumo);
+        resumos.remove(position);
+        adapter.notifyItemRemoved(position);
+        adapter.notifyItemRangeChanged(position, resumos.size());
+        Toast.makeText(this, "Resumo apagado!", Toast.LENGTH_SHORT).show();
+    }
+
+    // ... O restante da classe (lógica de menu de contexto, player de áudio) permanece o mesmo ...
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         getMenuInflater().inflate(R.menu.context_menu_resumo, menu);
     }
 
-    /**
-     * Handles context menu item selections for resumos, performing actions such as playing audio, editing, or deleting the selected item.
-     *
-     * @param item The selected menu item.
-     * @return true if the menu action was handled; false otherwise.
-     */
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         int position = adapter.getLongClickedPosition();
@@ -87,13 +92,13 @@ public class ListResumosActivity extends AppCompatActivity {
         Resumo resumoSelecionado = resumos.get(position);
 
         int itemId = item.getItemId();
-        if (itemId == R.id.menu_ouvir) { //
+        if (itemId == R.id.menu_ouvir) {
             ouvirResumo(resumoSelecionado);
             return true;
-        } else if (itemId == R.id.menu_editar) { //
-            Toast.makeText(this, "Funcionalidade de editar em construção...", Toast.LENGTH_SHORT).show(); //
+        } else if (itemId == R.id.menu_editar) {
+            Toast.makeText(this, "Funcionalidade de editar em construção...", Toast.LENGTH_SHORT).show();
             return true;
-        } else if (itemId == R.id.menu_apagar) { //
+        } else if (itemId == R.id.menu_apagar) {
             apagarResumo(resumoSelecionado, position);
             return true;
         } else {
@@ -101,21 +106,13 @@ public class ListResumosActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Plays the audio file associated with the given resumo.
-     *
-     * If an audio file path is not available or playback fails, a toast message is shown to the user.
-     * Releases any existing MediaPlayer instance before starting playback and ensures resources are released after playback completes.
-     *
-     * @param resumo The resumo whose audio should be played.
-     */
     public void ouvirResumo(Resumo resumo) {
         if (mediaPlayer != null) {
             mediaPlayer.release();
             mediaPlayer = null;
         }
 
-        String caminhoAudio = resumo.getCaminhoAudio(); //
+        String caminhoAudio = resumo.getCaminhoAudio();
         if (caminhoAudio == null || caminhoAudio.isEmpty()) {
             Toast.makeText(this, "Arquivo de áudio não encontrado.", Toast.LENGTH_SHORT).show();
             return;
@@ -123,7 +120,6 @@ public class ListResumosActivity extends AppCompatActivity {
 
         mediaPlayer = new MediaPlayer();
 
-        // APRIMORAMENTO: Garante que o som saia pelo canal de mídia
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_MEDIA)
                 .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
@@ -145,27 +141,6 @@ public class ListResumosActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Deletes the specified resumo from the data source and removes it from the displayed list.
-     *
-     * Updates the RecyclerView to reflect the removal and shows a confirmation toast.
-     *
-     * @param resumo   The resumo object to be deleted.
-     * @param position The position of the resumo in the list.
-     */
-    private void apagarResumo(Resumo resumo, int position) {
-        dao.deletarResumo(resumo); //
-        resumos.remove(position);
-        adapter.notifyItemRemoved(position);
-        adapter.notifyItemRangeChanged(position, resumos.size());
-        Toast.makeText(this, "Resumo apagado!", Toast.LENGTH_SHORT).show(); //
-    }
-
-    /**
-     * Releases the MediaPlayer resources if active when the activity stops.
-     *
-     * Ensures that audio playback is properly terminated and system resources are freed when the activity transitions out of the foreground.
-     */
     @Override
     protected void onStop() {
         super.onStop();
