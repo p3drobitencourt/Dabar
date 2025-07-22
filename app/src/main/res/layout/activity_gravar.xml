@@ -29,13 +29,6 @@
                 android:paddingEnd="16dp"
                 android:src="@drawable/ic_dabar_logo" />
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                app:srcCompat="@drawable/ic_menu" />
-
         </androidx.appcompat.widget.Toolbar>
 
 

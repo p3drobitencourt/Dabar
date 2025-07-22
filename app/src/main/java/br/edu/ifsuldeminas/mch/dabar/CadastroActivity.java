@@ -44,9 +44,9 @@ public class CadastroActivity extends AppCompatActivity {
         linkLogin = findViewById(R.id.link_login);
         // progressBar = findViewById(R.id.sua_progressbar_id); // Descomente e ajuste o ID
 
-        // Configura o clique do botão de cadastrar
-        btnCadastrar.setOnClickListener(view -> {
-            validarEcadastrarUsuario();
+        btnCadastrar.setOnClickListener(v -> {
+            // TODO: Quando a tela de login principal estiver pronta, mude para LoginActivity.class
+            startActivity(new Intent(CadastroActivity.this, ConfirmacaoCadastroActivity.class));
         });
 
         // Configura o clique do link para ir para a tela de login

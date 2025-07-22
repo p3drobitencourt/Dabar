@@ -19,7 +19,7 @@ public class ConfirmacaoCadastroActivity extends AppCompatActivity {
 
         btnFazerLogin.setOnClickListener(v -> {
             // Envia o usuário de volta para a tela de login inicial.
-            Intent intent = new Intent(ConfirmacaoCadastroActivity.this, LoginInicioActivity.class);
+            Intent intent = new Intent(ConfirmacaoCadastroActivity.this, MainLoginActivity.class);
             // Limpa o histórico de telas para que o usuário não volte para a confirmação.
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);

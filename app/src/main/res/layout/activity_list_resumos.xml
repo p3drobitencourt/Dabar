@@ -28,14 +28,6 @@
             android:contentDescription="Logo Dabar"
             android:src="@drawable/ic_dabar_logo" />
 
-        <ImageView
-            android:id="@+id/menu_icon"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:contentDescription="Menu"
-            android:src="@drawable/ic_menu" />
-
     </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
