@@ -1,54 +1,115 @@
 package br.edu.ifsuldeminas.mch.dabar;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btnGravarResumo;
-    private Button btnBibliotecaResumos;
-    private Button btnGuiaDabar;
-    private Button btnDicaEstudo; // Adicionado aqui
+    private Button btnGravarResumo, btnBibliotecaResumos, btnGuiaDabar, btnDicaEstudo, btnMetasEstudo;
     private BottomNavigationView bottomNavigation;
+    private TextView welcomeMessage;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Mapeia os componentes do layouta
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        // Se por algum motivo não houver usuário, volta para o login.
+        if (currentUser == null) {
+            goToLogin();
+            return; // Impede que o resto do onCreate seja executado.
+        }
+
+        // Configura a Toolbar
+        Toolbar toolbar = findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false); // Esconde o título padrão
+
+        // Mapeia os componentes do layout
+        welcomeMessage = findViewById(R.id.welcome_message);
         btnGravarResumo = findViewById(R.id.btn_gravar_resumo);
         btnBibliotecaResumos = findViewById(R.id.btn_biblioteca_resumos);
         btnGuiaDabar = findViewById(R.id.btn_guia_dabar);
-        btnDicaEstudo = findViewById(R.id.btn_dica_estudo); // Adicionado aqui
+        btnDicaEstudo = findViewById(R.id.btn_dica_estudo);
+        // Lembre-se de adicionar um botão com o id 'btn_metas_estudo' no seu activity_main.xml
+        // btnMetasEstudo = findViewById(R.id.btn_metas_estudo);
         bottomNavigation = findViewById(R.id.bottom_navigation);
 
+        // Atualiza a mensagem de boas-vindas com o nome do usuário
+        String userName = currentUser.getDisplayName();
+        if (userName != null && !userName.isEmpty()) {
+            welcomeMessage.setText(String.format("Bem-vindo, %s!", userName));
+        } else {
+            welcomeMessage.setText("Bem-vindo!");
+        }
+
+        createNotificationChannel();
+        scheduleDailyNotification();
         setupButtonListeners();
         setupBottomNavigation();
     }
 
-    private void setupButtonListeners() {
-        btnGravarResumo.setOnClickListener(v ->
-                startActivity(new Intent(MainActivity.this, NovoResumoActivity.class)));
-
-        btnBibliotecaResumos.setOnClickListener(v ->
-                startActivity(new Intent(MainActivity.this, ListResumosActivity.class)));
-
-        btnGuiaDabar.setOnClickListener(v ->
-                startActivity(new Intent(MainActivity.this, GuiaActivity.class)));
-
-        // --- AÇÃO PARA O NOVO BOTÃO ---
-        btnDicaEstudo.setOnClickListener(v ->
-                startActivity(new Intent(MainActivity.this, CitacaoDoDiaActivity.class)));
+    // --- LÓGICA DO MENU DE OPÇÕES (PARA O LOGOUT) ---
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_logout) {
+            mAuth.signOut();
+            goToLogin();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void goToLogin() {
+        Intent intent = new Intent(MainActivity.this, LoginInicioActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    // --- CONFIGURAÇÃO DOS BOTÕES ---
+    private void setupButtonListeners() {
+        btnGravarResumo.setOnClickListener(v -> startActivity(new Intent(this, NovoResumoActivity.class)));
+        btnBibliotecaResumos.setOnClickListener(v -> startActivity(new Intent(this, ListResumosActivity.class)));
+        btnGuiaDabar.setOnClickListener(v -> startActivity(new Intent(this, GuiaActivity.class)));
+        btnDicaEstudo.setOnClickListener(v -> startActivity(new Intent(this, CitacaoDoDiaActivity.class)));
+        // btnMetasEstudo.setOnClickListener(v -> startActivity(new Intent(this, MetasActivity.class)));
+    }
+
+    // --- CONFIGURAÇÃO DA NAVEGAÇÃO INFERIOR ---
     private void setupBottomNavigation() {
         bottomNavigation.setSelectedItemId(R.id.navigation_home);
-
         bottomNavigation.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.navigation_home) {
@@ -62,5 +123,41 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         });
+    }
+
+    // --- LÓGICA DAS NOTIFICAÇÕES ---
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Lembrete Dabar";
+            String description = "Canal para lembretes diários de estudo do Dabar";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(NotificationReceiver.CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void scheduleDailyNotification() {
+        // Define o horário para a notificação (ex: 20h)
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 20);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        // Se o horário já passou hoje, agenda para o dia seguinte
+        if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+        }
+
+        Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager != null) {
+            // Configura o alarme para repetir todos os dias no mesmo horário
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+            Toast.makeText(this, "Lembrete diário de estudos ativado!", Toast.LENGTH_SHORT).show();
+        }
     }
 }

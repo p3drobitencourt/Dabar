@@ -60,6 +60,8 @@
             android:exported="false">
         </activity>
 
+        <receiver android:name=".NotificationReceiver" android:enabled="true"/>
+
     </application>
 
 </manifest>
