@@ -29,7 +29,7 @@ public class LoginInicioActivity extends AppCompatActivity {
         // Por enquanto, vamos apontar para a MainActivity para teste.
         enterButton.setOnClickListener(v -> {
             // TODO: Quando a tela de login principal estiver pronta, mude para LoginActivity.class
-            startActivity(new Intent(LoginInicioActivity.this, MainActivity.class));
+            startActivity(new Intent(LoginInicioActivity.this, MainLoginActivity.class));
         });
 
         // Define a ação para o botão "Cadastrar-me".

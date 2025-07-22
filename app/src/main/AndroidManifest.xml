@@ -60,6 +60,8 @@
             android:exported="false">
         </activity>
 
+        <activity android:name=".MainLoginActivity" />
+
         <receiver android:name=".NotificationReceiver" android:enabled="true"/>
 
     </application>
