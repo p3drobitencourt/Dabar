@@ -43,6 +43,9 @@
             android:name=".NovaCategoriaActivity"
             android:exported="false" />
         <activity
+            android:name=".CitacaoDoDiaActivity"
+            android:exported="false" />
+        <activity
             android:name=".BibliotecaActivity"
             android:exported="false" />
         <activity

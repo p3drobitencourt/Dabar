@@ -11,24 +11,31 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/app_bar"
         android:layout_width="0dp"
-        android:layout_height="?attr/actionBarSize" android:background="@android:color/white"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/white"
         android:minHeight="?attr/actionBarSize"
+        app:contentInsetEnd="0dp"
+        app:contentInsetStartWithNavigation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:contentInsetStartWithNavigation="0dp" app:contentInsetEnd="0dp"> <ImageView
-        android:id="@+id/logo_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start" android:layout_marginStart="16dp"
-        android:contentDescription="Logo Dabar"
-        android:src="@drawable/ic_dabar_logo" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/logo_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="16dp"
+            android:contentDescription="Logo Dabar"
+            android:src="@drawable/ic_dabar_logo" />
 
         <ImageView
             android:id="@+id/menu_icon"
             android:layout_width="72dp"
             android:layout_height="73dp"
-            android:layout_gravity="end" android:layout_marginEnd="16dp" android:contentDescription="Menu"
+            android:layout_gravity="end"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="Menu"
             android:src="@drawable/ic_menu" />
 
     </androidx.appcompat.widget.Toolbar>
@@ -37,61 +44,79 @@
         android:id="@+id/welcome_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
         android:text="Bem vindo, Luís!"
+        android:textColor="@android:color/black"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_marginTop="64dp"
-        app:layout_constraintTop_toBottomOf="@id/app_bar" app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/app_bar" />
 
     <Button
         android:id="@+id/btn_gravar_resumo"
         android:layout_width="0dp"
         android:layout_height="60dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="32dp"
+        android:backgroundTint="#2EBC9D"
         android:text="Gravar novo resumo +"
         android:textColor="@android:color/white"
-        android:backgroundTint="#2EBC9D"
         android:textSize="18sp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginTop="48dp"
         app:cornerRadius="30dp"
-        app:layout_constraintTop_toBottomOf="@id/welcome_message"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/welcome_message" />
 
     <Button
         android:id="@+id/btn_biblioteca_resumos"
         android:layout_width="0dp"
         android:layout_height="60dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:backgroundTint="#2EBC9D"
         android:text="Biblioteca de resumos"
         android:textColor="@android:color/white"
-        android:backgroundTint="#2EBC9D"
         android:textSize="18sp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginTop="16dp"
         app:cornerRadius="30dp"
-        app:layout_constraintTop_toBottomOf="@id/btn_gravar_resumo"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/btn_gravar_resumo" />
 
     <Button
         android:id="@+id/btn_guia_dabar"
         android:layout_width="0dp"
         android:layout_height="60dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:backgroundTint="#2EBC9D"
         android:text="Guia do dabar"
         android:textColor="@android:color/white"
-        android:backgroundTint="#2EBC9D"
         android:textSize="18sp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginTop="16dp"
         app:cornerRadius="30dp"
-        app:layout_constraintTop_toBottomOf="@id/btn_biblioteca_resumos"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"  />
+        app:layout_constraintTop_toBottomOf="@id/btn_biblioteca_resumos" />
+
+    <Button
+        android:id="@+id/btn_dica_estudo"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:backgroundTint="#2EBC9D"
+        android:text="Dica de Estudo"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        app:cornerRadius="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_guia_dabar" />
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
@@ -99,12 +124,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="#F0EFF5"
-        app:menu="@menu/bottom_nav_menu"
-        app:labelVisibilityMode="labeled"
         app:itemIconTint="@color/bottom_nav_item_color"
         app:itemTextColor="@color/bottom_nav_item_color"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:menu="@menu/bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
