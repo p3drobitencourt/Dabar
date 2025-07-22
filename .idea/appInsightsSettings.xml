@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="br.edu.ifsuldeminas.mch.dabar" />
+                  <option name="mobileSdkAppId" value="1:49311959200:android:fba95d0cf868d86200e1c5" />
+                  <option name="projectId" value="dabar-5b675" />
+                  <option name="projectNumber" value="49311959200" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

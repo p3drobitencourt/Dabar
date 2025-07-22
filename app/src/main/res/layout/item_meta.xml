@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    android:layout_margin="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <CheckBox
+            android:id="@+id/checkboxMeta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="16dp">
+
+            <TextView
+                android:id="@+id/textViewTituloMeta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Título da Meta"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"/>
+
+            <TextView
+                android:id="@+id/textViewDescricaoMeta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Descrição da meta aqui..."
+                android:textSize="14sp"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/buttonDeletarMeta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_delete"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="@android:color/holo_red_light"
+            android:contentDescription="Deletar meta"/>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
