@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class ListResumosActivity extends AppCompatActivity { // Ou sua BaseActivity
+public class ListResumosActivity extends BaseActivity { // Ou sua BaseActivity
 
     private RecyclerView recyclerView;
     private AdapterResumos adapter;
@@ -38,6 +38,7 @@ public class ListResumosActivity extends AppCompatActivity { // Ou sua BaseActiv
 
         resumoDao = AppDatabase.getDatabase(getApplicationContext()).resumoDao();
 
+        setupToolbar(true);
         setupRecyclerView();
         setupBottomNavigation();
 

@@ -66,7 +66,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 return true;
                 // Supondo que o id para a lista de categorias seja "navigation_library"
             } else if (itemId == R.id.navigation_library) {
-                startActivity(new Intent(this, BibliotecaActivity.class));
+                startActivity(new Intent(this, ListResumosActivity.class));
                 return true;
             }
 
@@ -88,8 +88,11 @@ public abstract class BaseActivity extends AppCompatActivity {
                     startActivity(new Intent(this, MainActivity.class));
                     return true;
                 } else if (itemId == R.id.navigation_library) {
-                    startActivity(new Intent(this, BibliotecaActivity.class));
+                    startActivity(new Intent(this, ListResumosActivity.class));
                     return true;
+                }else if (itemId == R.id.navigation_new_category) {
+                        startActivity(new Intent(this, NovaCategoriaActivity.class));
+                        return true;
                 } else if (itemId == R.id.navigation_new_resume) {
                     startActivity(new Intent(this, NovoResumoActivity.class));
                     return true;

@@ -45,7 +45,7 @@ public class NovaMetaActivity extends BaseActivity {
 
         buttonSalvarMeta.setOnClickListener(v -> salvarMeta());
         setupToolbar(true);
-        // setupBottomNavigationWithoutSelection();
+        setupBottomNavigationWithoutSelection();
     }
 
     private void salvarMeta() {
