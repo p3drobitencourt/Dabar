@@ -39,28 +39,39 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param selectedItemId O ID do item de menu que deve aparecer como selecionado.
      */
     protected void setupBottomNavigation(int selectedItemId) {
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
-        if (bottomNav != null) {
-            bottomNav.setSelectedItemId(selectedItemId);
-            bottomNav.setOnItemSelectedListener(item -> {
-                int itemId = item.getItemId();
-                if (itemId == selectedItemId) {
-                    return false; // Não faz nada se o item já está selecionado
-                }
+        BottomNavigationView bottomNavigation = findViewById(R.id.bottom_navigation);
 
-                if (itemId == R.id.navigation_home) {
-                    startActivity(new Intent(this, MainActivity.class));
-                    return true;
-                } else if (itemId == R.id.navigation_library) {
-                    startActivity(new Intent(this, BibliotecaActivity.class));
-                    return true;
-                } else if (itemId == R.id.navigation_new_resume) {
-                    startActivity(new Intent(this, NovaCategoriaActivity.class));
-                    return true;
-                }
-                return false;
-            });
+        // Evita que o listener seja acionado ao definirmos o item selecionado
+        if (bottomNavigation.getSelectedItemId() != selectedItemId) {
+            bottomNavigation.setSelectedItemId(selectedItemId);
         }
+
+        bottomNavigation.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+
+            // Evita recarregar a tela se o item selecionado for o atual
+            if (itemId == getApplicationInfo().labelRes) { // Uma forma de checar a tela atual
+                return true;
+            }
+
+            if (itemId == R.id.navigation_home) {
+                startActivity(new Intent(this, MainActivity.class));
+                return true;
+                // Supondo que você tenha um id "navigation_new_summary" no seu menu
+            } else if (itemId == R.id.navigation_new_resume) {
+                startActivity(new Intent(this, NovoResumoActivity.class));
+                return true;
+            } else if (itemId == R.id.navigation_new_category) {
+                startActivity(new Intent(this, NovaCategoriaActivity.class));
+                return true;
+                // Supondo que o id para a lista de categorias seja "navigation_library"
+            } else if (itemId == R.id.navigation_library) {
+                startActivity(new Intent(this, BibliotecaActivity.class));
+                return true;
+            }
+
+            return false;
+        });
     }
 
     protected void setupBottomNavigationWithoutSelection() {

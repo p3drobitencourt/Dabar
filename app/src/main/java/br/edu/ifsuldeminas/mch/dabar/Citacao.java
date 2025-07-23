@@ -2,40 +2,20 @@ package br.edu.ifsuldeminas.mch.dabar;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Representa o "molde" para a resposta da API de citações (Quotable.io).
- * Usamos a anotação @SerializedName para garantir que o GSON associe
- * corretamente os campos do JSON com os atributos da nossa classe.
- */
 public class Citacao {
-
-    /**
-     * O campo 'content' no JSON será mapeado para este atributo.
-     */
+    // Usa o nome exato que a API retorna ("content")
     @SerializedName("content")
-    private String texto;
+    private String content;
 
-    /**
-     * O campo 'author' no JSON será mapeado para este atributo.
-     */
+    // Usa o nome exato que a API retorna ("author")
     @SerializedName("author")
-    private String autor;
+    private String author;
 
-    // --- Getters e Setters ---
-
-    public String getTexto() {
-        return texto;
+    public String getContent() {
+        return content;
     }
 
-    public void setTexto(String texto) {
-        this.texto = texto;
-    }
-
-    public String getAutor() {
-        return autor;
-    }
-
-    public void setAutor(String autor) {
-        this.autor = autor;
+    public String getAuthor() {
+        return author;
     }
 }

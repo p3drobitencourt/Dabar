@@ -15,6 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Dabar"
+        android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="31">
 
         <activity
@@ -40,6 +41,7 @@
         <activity android:name=".ListResumosActivity" android:exported="false" />
         <activity android:name=".MetasActivity" android:exported="false" />
         <activity android:name=".NovaMetaActivity" android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="false">

@@ -7,14 +7,11 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
-import br.edu.ifsuldeminas.mch.dabar.Meta; // <-- ESTA LINHA FOI ADICIONADA
 
 public class MetasAdapter extends FirestoreRecyclerAdapter<Meta, MetasAdapter.MetaViewHolder> {
 
@@ -24,6 +21,7 @@ public class MetasAdapter extends FirestoreRecyclerAdapter<Meta, MetasAdapter.Me
         super(options);
     }
 
+    // ... onBindViewHolder e onCreateViewHolder continuam iguais ...
     @Override
     protected void onBindViewHolder(@NonNull MetaViewHolder holder, int position, @NonNull Meta model) {
         holder.textViewTituloMeta.setText(model.getTitulo());
@@ -44,9 +42,6 @@ public class MetasAdapter extends FirestoreRecyclerAdapter<Meta, MetasAdapter.Me
         return new MetaViewHolder(view);
     }
 
-    public void deleteItem(int position) {
-        getSnapshots().getSnapshot(position).getReference().delete();
-    }
 
     class MetaViewHolder extends RecyclerView.ViewHolder {
         TextView textViewTituloMeta;
@@ -60,6 +55,14 @@ public class MetasAdapter extends FirestoreRecyclerAdapter<Meta, MetasAdapter.Me
             textViewDescricaoMeta = itemView.findViewById(R.id.textViewDescricaoMeta);
             checkboxMeta = itemView.findViewById(R.id.checkboxMeta);
             buttonDeletarMeta = itemView.findViewById(R.id.buttonDeletarMeta);
+
+            // ✅ LISTENER ADICIONADO PARA O CLIQUE NO ITEM (PARA EDITAR)
+            itemView.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && listener != null) {
+                    listener.onItemClick(getSnapshots().getSnapshot(position));
+                }
+            });
 
             checkboxMeta.setOnClickListener(v -> {
                 int position = getAdapterPosition();
@@ -78,6 +81,7 @@ public class MetasAdapter extends FirestoreRecyclerAdapter<Meta, MetasAdapter.Me
     }
 
     public interface OnItemClickListener {
+        void onItemClick(DocumentSnapshot documentSnapshot); // ✅ Assinatura do método de clique
         void onCheckboxClick(DocumentSnapshot documentSnapshot, boolean isChecked);
         void onDeleteClick(DocumentSnapshot documentSnapshot);
     }

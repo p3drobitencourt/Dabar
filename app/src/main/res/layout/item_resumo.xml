@@ -10,27 +10,24 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:text="Título do Resumo" />
-
-    <TextView
-        android:id="@+id/textViewDescricao"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:textSize="14sp"
-        android:text="Descrição do resumo aqui..." />
-
-    <TextView
-        android:id="@+id/textViewCategoria"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="#E0E0E0"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-        android:textSize="12sp"
-        android:text="Categoria" />
-
-</LinearLayout>
+        android:text="Título do Resumo"
+        android:textColor="@android:color/black" /> <TextView
+    android:id="@+id/textViewDescricao"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:textSize="14sp"
+    android:text="Descrição do resumo aqui..."
+    android:textColor="#555555" /> <TextView
+    android:id="@+id/textViewCategoria"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:background="#E0E0E0"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp"
+    android:textSize="12sp"
+    android:text="Categoria"
+    android:textColor="@android:color/black" /> </LinearLayout>

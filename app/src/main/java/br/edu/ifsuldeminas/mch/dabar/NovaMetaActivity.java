@@ -2,30 +2,22 @@ package br.edu.ifsuldeminas.mch.dabar;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class NovaMetaActivity extends BaseActivity {
-
-    private static final String TAG = "NovaMetaActivity_DEBUG"; // Tag para facilitar a busca no Logcat
-
     private TextInputEditText editTextTituloMeta;
     private TextInputEditText editTextDescricaoMeta;
     private Button buttonSalvarMeta;
-
     private FirebaseFirestore db;
     private FirebaseUser user;
+
+    // ✅ VARIÁVEL PARA SABER SE ESTAMOS EDITANDO
+    private String idMetaAtual;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,18 +31,24 @@ public class NovaMetaActivity extends BaseActivity {
         editTextDescricaoMeta = findViewById(R.id.editTextDescricaoMeta);
         buttonSalvarMeta = findViewById(R.id.buttonSalvarMeta);
 
-        buttonSalvarMeta.setOnClickListener(v -> salvarMeta());
+        // ✅ LÓGICA PARA VERIFICAR SE É CRIAÇÃO OU EDIÇÃO
+        if (getIntent().hasExtra("ID_META")) {
+            // Se tem um ID, estamos editando
+            setTitle("Editar Meta");
+            idMetaAtual = getIntent().getStringExtra("ID_META");
+            editTextTituloMeta.setText(getIntent().getStringExtra("TITULO_META"));
+            editTextDescricaoMeta.setText(getIntent().getStringExtra("DESCRICAO_META"));
+        } else {
+            // Se não, estamos criando
+            setTitle("Nova Meta");
+        }
 
+        buttonSalvarMeta.setOnClickListener(v -> salvarMeta());
         setupToolbar(true);
-        setupBottomNavigationWithoutSelection();
+        // setupBottomNavigationWithoutSelection();
     }
 
     private void salvarMeta() {
-        // --- MENSAGEM DE DIAGNÓSTICO 1 ---
-        // Veremos se o clique no botão está funcionando.
-        Log.d(TAG, "Método salvarMeta() foi chamado.");
-        Toast.makeText(this, "Tentando salvar...", Toast.LENGTH_SHORT).show();
-
         String titulo = editTextTituloMeta.getText().toString().trim();
         String descricao = editTextDescricaoMeta.getText().toString().trim();
 
@@ -61,29 +59,33 @@ public class NovaMetaActivity extends BaseActivity {
 
         if (user == null) {
             Toast.makeText(this, "Erro: Nenhum usuário logado.", Toast.LENGTH_SHORT).show();
-            Log.e(TAG, "Tentativa de salvar sem usuário logado.");
             return;
         }
 
-        Map<String, Object> meta = new HashMap<>();
-        meta.put("titulo", titulo);
-        meta.put("descricao", descricao);
-        meta.put("concluida", false);
-        meta.put("userId", user.getUid());
+        // ✅ LÓGICA DE SALVAR ATUALIZADA
+        if (idMetaAtual != null) {
+            // MODO EDIÇÃO: Atualiza o documento existente
+            db.collection("metas").document(idMetaAtual)
+                    .update("titulo", titulo, "descricao", descricao)
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(NovaMetaActivity.this, "Meta atualizada!", Toast.LENGTH_SHORT).show();
+                        finish();
+                    })
+                    .addOnFailureListener(e -> Toast.makeText(NovaMetaActivity.this, "Erro ao atualizar.", Toast.LENGTH_SHORT).show());
+        } else {
+            // MODO CRIAÇÃO: Cria um novo documento
+            Meta meta = new Meta();
+            meta.setTitulo(titulo);
+            meta.setDescricao(descricao);
+            meta.setConcluida(false);
+            meta.setUserId(user.getUid());
 
-        Log.d(TAG, "Iniciando a escrita no Firestore...");
-        db.collection("metas")
-                .add(meta)
-                .addOnSuccessListener(documentReference -> {
-                    // --- MENSAGEM DE SUCESSO ---
-                    Log.d(TAG, "SUCESSO! Meta salva com ID: " + documentReference.getId());
-                    Toast.makeText(NovaMetaActivity.this, "Meta salva com sucesso!", Toast.LENGTH_LONG).show();
-                    finish();
-                })
-                .addOnFailureListener(e -> {
-                    // --- MENSAGEM DE FALHA DETALHADA ---
-                    Log.e(TAG, "FALHA ao salvar meta. Erro: ", e); // Loga o erro completo
-                    Toast.makeText(NovaMetaActivity.this, "ERRO ao salvar: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                });
+            db.collection("metas").add(meta)
+                    .addOnSuccessListener(documentReference -> {
+                        Toast.makeText(NovaMetaActivity.this, "Meta salva!", Toast.LENGTH_SHORT).show();
+                        finish();
+                    })
+                    .addOnFailureListener(e -> Toast.makeText(NovaMetaActivity.this, "Erro ao salvar.", Toast.LENGTH_SHORT).show());
+        }
     }
 }
