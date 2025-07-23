@@ -45,8 +45,7 @@ public class CadastroActivity extends AppCompatActivity {
         // progressBar = findViewById(R.id.sua_progressbar_id); // Descomente e ajuste o ID
 
         btnCadastrar.setOnClickListener(v -> {
-            // TODO: Quando a tela de login principal estiver pronta, mude para LoginActivity.class
-            startActivity(new Intent(CadastroActivity.this, ConfirmacaoCadastroActivity.class));
+            validarEcadastrarUsuario();
         });
 
         // Configura o clique do link para ir para a tela de login
@@ -118,7 +117,7 @@ public class CadastroActivity extends AppCompatActivity {
                             user.updateProfile(profileUpdates).addOnCompleteListener(profileTask -> {
                                 if (profileTask.isSuccessful()) {
                                     Toast.makeText(CadastroActivity.this, "Usuário cadastrado com sucesso!", Toast.LENGTH_LONG).show();
-                                    // Redireciona para a tela de login ou principal
+                                    startActivity(new Intent(CadastroActivity.this, ConfirmacaoCadastroActivity.class));
                                     finish();
                                 }
                             });

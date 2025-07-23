@@ -92,6 +92,7 @@ public class MainLoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Login bem-sucedido, redireciona para a tela principal
+
                         abrirTelaPrincipal();
                     } else {
                         // Se o login falhar, exibe uma mensagem ao usuário.
