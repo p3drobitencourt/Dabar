@@ -2,46 +2,45 @@ package br.edu.ifsuldeminas.mch.dabar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem; // Importação adicionada
+import androidx.annotation.NonNull; // Importação adicionada
 import androidx.appcompat.app.AppCompatActivity;
-
+import androidx.appcompat.widget.Toolbar; // Importação adicionada
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class GuiaActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigation;
 
-    /**
-     * Initializes the activity, sets the content view, and configures the bottom navigation bar.
-     *
-     * @param savedInstanceState If the activity is being re-initialized after previously being shut down, this Bundle contains the data it most recently supplied; otherwise, it is null.
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guia);
 
-        // --- INÍCIO DA CORREÇÃO ---
+        // --- LÓGICA DA TOOLBAR COM BOTÃO VOLTAR ---
+        Toolbar toolbar = findViewById(R.id.app_bar); // Use o ID da sua toolbar
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Mostra a seta de voltar
+            getSupportActionBar().setDisplayShowTitleEnabled(false); // Esconde o título do app
+        }
+        // --- FIM DA LÓGICA DA TOOLBAR ---
 
-        // 1. Conecta a variável ao componente do layout
-        // (Supondo que no seu 'activity_guia.xml' a barra de navegação tenha o id 'bottom_navigation')
         bottomNavigation = findViewById(R.id.bottom_navigation);
-
-        // 2. Chama o método para fazer a mágica acontecer
         setupBottomNavigation();
-
-        // --- FIM DA CORREÇÃO ---
     }
 
-    /**
-     * Configures the bottom navigation bar to handle item selection and launch corresponding activities.
-     *
-     * Sets the default selected item to "home" and attaches a listener that starts the appropriate activity
-     * when a navigation item is selected.
-     */
-    private void setupBottomNavigation() {
-        // Agora esta linha não dará erro, pois 'bottomNavigation' foi inicializada
-        bottomNavigation.setSelectedItemId(R.id.navigation_home);
+    // --- MÉTODO PARA LIDAR COM O CLIQUE NA SETA DA TOOLBAR ---
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // Fecha a activity
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
+    private void setupBottomNavigation() {
         bottomNavigation.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.navigation_home) {

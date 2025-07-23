@@ -3,9 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
         android:allowBackup="true"
@@ -29,38 +30,23 @@
         </activity>
 
         <activity android:name=".LoginInicioActivity" android:exported="false" />
+        <activity android:name=".MainLoginActivity" android:exported="false"/>
         <activity android:name=".CadastroActivity" android:exported="false" />
         <activity android:name=".ConfirmacaoCadastroActivity" android:exported="false" />
+        <activity android:name=".GravarActivity" android:exported="false" />
+        <activity android:name=".GuiaActivity" android:exported="false" />
+        <activity android:name=".NovaCategoriaActivity" android:exported="false" />
+        <activity android:name=".CitacaoDoDiaActivity" android:exported="false" />
+        <activity android:name=".BibliotecaActivity" android:exported="false" />
+        <activity android:name=".NovoResumoActivity" android:exported="false" />
+        <activity android:name=".ListResumosActivity" android:exported="false" />
 
-
-        <activity
-            android:name=".GravarActivity"
-            android:exported="false" />
-        <activity
-            android:name=".GuiaActivity"
-            android:exported="false" />
-        <activity
-            android:name=".NovaCategoriaActivity"
-            android:exported="false" />
-        <activity
-            android:name=".CitacaoDoDiaActivity"
-            android:exported="false" />
-        <activity
-            android:name=".BibliotecaActivity"
-            android:exported="false" />
-        <activity
-            android:name=".NovoResumoActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ListResumosActivity"
-            android:exported="false" />
+        <activity android:name=".MetasActivity" android:exported="false" />
 
         <activity
             android:name=".MainActivity"
             android:exported="false">
         </activity>
-
-        <activity android:name=".MainLoginActivity" />
 
         <receiver android:name=".NotificationReceiver" android:enabled="true"/>
 

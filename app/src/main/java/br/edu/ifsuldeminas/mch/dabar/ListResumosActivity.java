@@ -9,15 +9,15 @@ import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
 import java.util.List;
 
-// --- IMPORTAÇÕES DO ROOM ---
-import br.edu.ifsuldeminas.mch.dabar.ResumoDAO;
 import br.edu.ifsuldeminas.mch.dabar.CategoriaDAO;
+import br.edu.ifsuldeminas.mch.dabar.ResumoDAO;
 import br.edu.ifsuldeminas.mch.dabar.AppDatabase;
 
 public class ListResumosActivity extends AppCompatActivity {
@@ -26,8 +26,6 @@ public class ListResumosActivity extends AppCompatActivity {
     private AdapterResumos adapter;
     private List<Resumo> resumos;
     private MediaPlayer mediaPlayer;
-
-    // --- DAOs DO ROOM ---
     private ResumoDAO resumoDao;
     private CategoriaDAO categoriaDao;
 
@@ -35,12 +33,31 @@ public class ListResumosActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_resumos);
+
+        // --- LÓGICA DA TOOLBAR COM BOTÃO VOLTAR ---
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Mostra a seta de voltar
+            getSupportActionBar().setDisplayShowTitleEnabled(false); // Esconde o título do app
+        }
+        // --- FIM DA LÓGICA DA TOOLBAR ---
+
         recyclerView = findViewById(R.id.recyclerViewResumos);
 
-        // --- INICIALIZAÇÃO DOS DAOs ---
         AppDatabase db = AppDatabase.getDatabase(this);
         resumoDao = db.resumoDao();
         categoriaDao = db.categoriaDao();
+    }
+
+    // --- MÉTODO PARA LIDAR COM O CLIQUE NA SETA DA TOOLBAR ---
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // Fecha a activity
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -50,32 +67,17 @@ public class ListResumosActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView() {
-        // 1. Busca todos os resumos do banco.
         resumos = resumoDao.listarTodosResumos();
-
-        // 2. Para cada resumo, busca e associa sua respectiva categoria.
         for (Resumo resumo : resumos) {
             Categoria categoria = categoriaDao.findCategoriaById(resumo.getCategoriaId());
             resumo.setCategoria(categoria);
         }
 
-        // 3. Configura o adapter com a lista completa.
         adapter = new AdapterResumos(this, resumos, this::ouvirResumo);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         registerForContextMenu(recyclerView);
     }
-
-    private void apagarResumo(Resumo resumo, int position) {
-        // --- USO DO DAO DO ROOM ---
-        resumoDao.deletarResumo(resumo);
-        resumos.remove(position);
-        adapter.notifyItemRemoved(position);
-        adapter.notifyItemRangeChanged(position, resumos.size());
-        Toast.makeText(this, "Resumo apagado!", Toast.LENGTH_SHORT).show();
-    }
-
-    // ... O restante da classe (lógica de menu de contexto, player de áudio) permanece o mesmo ...
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -139,6 +141,14 @@ public class ListResumosActivity extends AppCompatActivity {
             e.printStackTrace();
             Toast.makeText(this, "Erro ao tentar reproduzir o áudio.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void apagarResumo(Resumo resumo, int position) {
+        resumoDao.deletarResumo(resumo);
+        resumos.remove(position);
+        adapter.notifyItemRemoved(position);
+        adapter.notifyItemRangeChanged(position, resumos.size());
+        Toast.makeText(this, "Resumo apagado!", Toast.LENGTH_SHORT).show();
     }
 
     @Override

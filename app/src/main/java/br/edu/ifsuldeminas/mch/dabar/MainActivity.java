@@ -53,8 +53,7 @@ public class MainActivity extends AppCompatActivity {
         btnBibliotecaResumos = findViewById(R.id.btn_biblioteca_resumos);
         btnGuiaDabar = findViewById(R.id.btn_guia_dabar);
         btnDicaEstudo = findViewById(R.id.btn_dica_estudo);
-        // Lembre-se de adicionar um botão com o id 'btn_metas_estudo' no seu activity_main.xml
-        // btnMetasEstudo = findViewById(R.id.btn_metas_estudo);
+        btnMetasEstudo = findViewById(R.id.btn_metas_estudo);
         bottomNavigation = findViewById(R.id.bottom_navigation);
 
         String userName = currentUser.getDisplayName();
@@ -110,9 +109,9 @@ public class MainActivity extends AppCompatActivity {
         btnBibliotecaResumos.setOnClickListener(v -> startActivity(new Intent(this, ListResumosActivity.class)));
         btnGuiaDabar.setOnClickListener(v -> startActivity(new Intent(this, GuiaActivity.class)));
         btnDicaEstudo.setOnClickListener(v -> startActivity(new Intent(this, CitacaoDoDiaActivity.class)));
-        // if(btnMetasEstudo != null) {
-        //    btnMetasEstudo.setOnClickListener(v -> startActivity(new Intent(this, MetasActivity.class)));
-        // }
+        if(btnMetasEstudo != null) {
+           btnMetasEstudo.setOnClickListener(v -> startActivity(new Intent(this, MetasActivity.class)));
+        }
     }
 
     private void setupBottomNavigation() {
