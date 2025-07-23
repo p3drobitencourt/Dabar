@@ -9,8 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 
-// --- IMPORTAÇÕES CORRIGIDAS DO ROOM ---
-// Apontando para os pacotes corretos que criamos
+// Importações corretas para o Room
 import br.edu.ifsuldeminas.mch.dabar.CategoriaDAO;
 import br.edu.ifsuldeminas.mch.dabar.AppDatabase;
 
@@ -21,22 +20,22 @@ public class NovaCategoriaActivity extends AppCompatActivity {
     private Button btnCadastrar;
     private BottomNavigationView bottomNavigation;
 
-    // --- DAO DO ROOM CORRIGIDO ---
-    // A variável agora usa a interface CategoriaDao que criamos.
+    // A variável agora usa a interface CategoriaDao do Room.
     private CategoriaDAO categoriaDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // O setContentView aponta para o layout que seu amigo criou, que está correto.
         setContentView(R.layout.activity_nova_categoria);
 
-        // Agora o Java vai encontrar esses IDs no XML corrigido.
+        // O Java vai encontrar esses IDs no XML do seu amigo.
         editTextTitulo = findViewById(R.id.edit_text_titulo_categoria);
         editTextDescricao = findViewById(R.id.edit_text_descricao_categoria);
         btnCadastrar = findViewById(R.id.btn_cadastrar_categoria);
         bottomNavigation = findViewById(R.id.bottom_navigation);
 
-        // --- INICIALIZAÇÃO CORRETA DO DAO DO ROOM ---
+        // INICIALIZAÇÃO CORRETA DO DAO DO ROOM
         categoriaDao = AppDatabase.getDatabase(this).categoriaDao();
 
         btnCadastrar.setOnClickListener(v -> salvarCategoria());
@@ -58,7 +57,7 @@ public class NovaCategoriaActivity extends AppCompatActivity {
         novaCategoria.setDescricao(descricao);
 
         try {
-            // --- USO DO DAO DO ROOM ---
+            // A chamada agora é para o DAO do Room.
             categoriaDao.adicionarCategoria(novaCategoria);
             Toast.makeText(this, "Categoria cadastrada com sucesso!", Toast.LENGTH_SHORT).show();
             finish();

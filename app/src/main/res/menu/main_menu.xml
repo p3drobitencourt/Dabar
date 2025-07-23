@@ -3,6 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_metas"
+        android:title="Minhas Metas"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_dica"
+        android:title="Dica de Estudo"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_guia"
+        android:title="Guia do Dabar"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_logout"
         android:title="Sair"
         app:showAsAction="never" />

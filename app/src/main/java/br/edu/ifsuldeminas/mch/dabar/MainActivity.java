@@ -39,18 +39,15 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        // Se por algum motivo não houver usuário, volta para o login.
         if (currentUser == null) {
             goToLogin();
-            return; // Impede que o resto do onCreate seja executado.
+            return;
         }
 
-        // Configura a Toolbar
         Toolbar toolbar = findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false); // Esconde o título padrão
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        // Mapeia os componentes do layout
         welcomeMessage = findViewById(R.id.welcome_message);
         btnGravarResumo = findViewById(R.id.btn_gravar_resumo);
         btnBibliotecaResumos = findViewById(R.id.btn_biblioteca_resumos);
@@ -60,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
         // btnMetasEstudo = findViewById(R.id.btn_metas_estudo);
         bottomNavigation = findViewById(R.id.bottom_navigation);
 
-        // Atualiza a mensagem de boas-vindas com o nome do usuário
         String userName = currentUser.getDisplayName();
         if (userName != null && !userName.isEmpty()) {
             welcomeMessage.setText(String.format("Bem-vindo, %s!", userName));
@@ -74,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
         setupBottomNavigation();
     }
 
-    // --- LÓGICA DO MENU DE OPÇÕES (PARA O LOGOUT) ---
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
@@ -83,11 +78,23 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_logout) {
+        int itemId = item.getItemId();
+
+        if (itemId == R.id.action_logout) {
             mAuth.signOut();
             goToLogin();
             return true;
+        } else if (itemId == R.id.action_metas) {
+            startActivity(new Intent(this, MetasActivity.class));
+            return true;
+        } else if (itemId == R.id.action_dica) {
+            startActivity(new Intent(this, CitacaoDoDiaActivity.class));
+            return true;
+        } else if (itemId == R.id.action_guia) {
+            startActivity(new Intent(this, GuiaActivity.class));
+            return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -98,16 +105,16 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    // --- CONFIGURAÇÃO DOS BOTÕES ---
     private void setupButtonListeners() {
         btnGravarResumo.setOnClickListener(v -> startActivity(new Intent(this, NovoResumoActivity.class)));
         btnBibliotecaResumos.setOnClickListener(v -> startActivity(new Intent(this, ListResumosActivity.class)));
         btnGuiaDabar.setOnClickListener(v -> startActivity(new Intent(this, GuiaActivity.class)));
         btnDicaEstudo.setOnClickListener(v -> startActivity(new Intent(this, CitacaoDoDiaActivity.class)));
-        // btnMetasEstudo.setOnClickListener(v -> startActivity(new Intent(this, MetasActivity.class)));
+        // if(btnMetasEstudo != null) {
+        //    btnMetasEstudo.setOnClickListener(v -> startActivity(new Intent(this, MetasActivity.class)));
+        // }
     }
 
-    // --- CONFIGURAÇÃO DA NAVEGAÇÃO INFERIOR ---
     private void setupBottomNavigation() {
         bottomNavigation.setSelectedItemId(R.id.navigation_home);
         bottomNavigation.setOnItemSelectedListener(item -> {
@@ -125,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // --- LÓGICA DAS NOTIFICAÇÕES ---
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "Lembrete Dabar";
@@ -139,13 +145,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void scheduleDailyNotification() {
-        // Define o horário para a notificação (ex: 20h)
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 20);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
 
-        // Se o horário já passou hoje, agenda para o dia seguinte
         if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
             calendar.add(Calendar.DAY_OF_YEAR, 1);
         }
@@ -155,7 +159,6 @@ public class MainActivity extends AppCompatActivity {
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
-            // Configura o alarme para repetir todos os dias no mesmo horário
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
             Toast.makeText(this, "Lembrete diário de estudos ativado!", Toast.LENGTH_SHORT).show();
         }
