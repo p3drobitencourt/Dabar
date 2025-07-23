@@ -68,7 +68,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="72dp"
-        android:backgroundTint="@android:color/transparent"
+        android:backgroundTint="@android:color/white"
         android:paddingVertical="14dp"
         android:text="Cadastrar-me"
         android:textColor="#38A169"

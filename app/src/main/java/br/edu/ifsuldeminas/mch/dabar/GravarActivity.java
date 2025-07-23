@@ -22,7 +22,7 @@ import java.io.IOException;
 import br.edu.ifsuldeminas.mch.dabar.ResumoDAO;
 import br.edu.ifsuldeminas.mch.dabar.AppDatabase;
 
-public class GravarActivity extends AppCompatActivity {
+public class GravarActivity extends BaseActivity {
 
     private boolean isRecording = false;
     private FrameLayout buttonGravar;
@@ -39,14 +39,8 @@ public class GravarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gravar);
 
-        // --- LÓGICA DA TOOLBAR COM BOTÃO VOLTAR ---
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }
-        // --- FIM DA LÓGICA DA TOOLBAR ---
+        setupToolbar(true);
+        setupBottomNavigation(R.id.navigation_new_resume);
 
         titulo = getIntent().getStringExtra("EXTRA_TITULO");
         descricao = getIntent().getStringExtra("EXTRA_DESCRICAO");
@@ -66,15 +60,6 @@ public class GravarActivity extends AppCompatActivity {
         });
     }
 
-    // --- MÉTODO PARA LIDAR COM O CLIQUE NA SETA DA TOOLBAR ---
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     // ... (resto da sua classe com a lógica de gravação permanece o mesmo)
 

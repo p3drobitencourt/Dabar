@@ -6,12 +6,11 @@
         android:title="Início" />
 
     <item
+        android:id="@+id/navigation_new_resume"
+        android:icon="@drawable/ic_microphone"
+        android:title="Novo Resumo" />
+    <item
         android:id="@+id/navigation_library"
         android:icon="@drawable/ic_library_books"
         android:title="Biblioteca" />
-
-    <item
-        android:id="@+id/navigation_new_category"
-        android:icon="@drawable/ic_add"
-        android:title="Nova Categoria" />
 </menu>

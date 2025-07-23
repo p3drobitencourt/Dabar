@@ -8,32 +8,7 @@
     android:background="@android:color/white"
     tools:context=".MainActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="74dp"
-        android:theme="@style/Theme.Dabar.AppBarOverlay">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"
-            app:popupTheme="@style/Theme.Dabar.PopupOverlay">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:contentDescription="Logo Dabar"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:src="@drawable/ic_dabar_logo" />
-
-        </androidx.appcompat.widget.Toolbar>
-
-
-
-    </com.google.android.material.appbar.AppBarLayout>
+    <include layout="@layout/reusable_appbar" />
 
 
 

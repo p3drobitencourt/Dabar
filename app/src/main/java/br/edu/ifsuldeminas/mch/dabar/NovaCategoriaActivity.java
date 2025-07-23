@@ -10,10 +10,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 
 // Importações corretas para o Room
-import br.edu.ifsuldeminas.mch.dabar.CategoriaDAO;
-import br.edu.ifsuldeminas.mch.dabar.AppDatabase;
 
-public class NovaCategoriaActivity extends AppCompatActivity {
+
+public class NovaCategoriaActivity extends BaseActivity {
 
     private TextInputEditText editTextTitulo;
     private TextInputEditText editTextDescricao;
@@ -29,6 +28,9 @@ public class NovaCategoriaActivity extends AppCompatActivity {
         // O setContentView aponta para o layout que seu amigo criou, que está correto.
         setContentView(R.layout.activity_nova_categoria);
 
+        setupToolbar(true);
+        setupBottomNavigationWithoutSelection();
+
         // O Java vai encontrar esses IDs no XML do seu amigo.
         editTextTitulo = findViewById(R.id.edit_text_titulo_categoria);
         editTextDescricao = findViewById(R.id.edit_text_descricao_categoria);
@@ -39,8 +41,6 @@ public class NovaCategoriaActivity extends AppCompatActivity {
         categoriaDao = AppDatabase.getDatabase(this).categoriaDao();
 
         btnCadastrar.setOnClickListener(v -> salvarCategoria());
-
-        setupBottomNavigation();
     }
 
     private void salvarCategoria() {
@@ -67,21 +67,4 @@ public class NovaCategoriaActivity extends AppCompatActivity {
         }
     }
 
-    private void setupBottomNavigation() {
-        bottomNavigation.setSelectedItemId(R.id.navigation_new_category);
-
-        bottomNavigation.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.navigation_home) {
-                startActivity(new Intent(this, MainActivity.class));
-                return true;
-            } else if (itemId == R.id.navigation_library) {
-                startActivity(new Intent(this, BibliotecaActivity.class));
-                return true;
-            } else if (itemId == R.id.navigation_new_category) {
-                return true;
-            }
-            return false;
-        });
-    }
 }

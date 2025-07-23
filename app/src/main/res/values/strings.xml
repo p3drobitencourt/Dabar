@@ -12,4 +12,5 @@
     </string-array>
     <string name="app_name">Dabar</string>
     <string name="add_new_category_description">Adicionar nova categoria</string>
+    <string name="logo_dabar">Logo Dabar</string>
 </resources>

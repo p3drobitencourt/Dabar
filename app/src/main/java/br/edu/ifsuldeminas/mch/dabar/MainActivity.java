@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private Button btnGravarResumo, btnBibliotecaResumos, btnGuiaDabar, btnDicaEstudo, btnMetasEstudo;
     private BottomNavigationView bottomNavigation;
@@ -45,13 +44,8 @@ public class MainActivity extends AppCompatActivity {
             return; // Impede a execução do resto do código para evitar erros.
         }
 
-        // Configura a Toolbar para ser a AppBar oficial da tela.
-        Toolbar toolbar = findViewById(R.id.app_bar);
-        setSupportActionBar(toolbar);
-        // Esconde o título padrão para que o logo "dabar" apareça como planejado.
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }
+        setupToolbar(false);
+        setupBottomNavigation(R.id.navigation_home);
 
         // Mapeamento de todos os componentes visuais.
         welcomeMessage = findViewById(R.id.welcome_message);
@@ -74,36 +68,6 @@ public class MainActivity extends AppCompatActivity {
         createNotificationChannel();
         scheduleDailyNotification();
         setupButtonListeners();
-        setupBottomNavigation();
-    }
-
-    // --- LÓGICA DO MENU DE 3 PONTINHOS (OPÇÕES) ---
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // "Infla" (desenha) o menu que criamos em res/menu/main_menu.xml na AppBar.
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        // Lida com os cliques nos itens do menu de 3 pontinhos.
-        int itemId = item.getItemId();
-        if (itemId == R.id.action_logout) {
-            mAuth.signOut();
-            goToLogin();
-            return true;
-        } else if (itemId == R.id.action_metas) {
-            startActivity(new Intent(this, MetasActivity.class));
-            return true;
-        } else if (itemId == R.id.action_dica) {
-            startActivity(new Intent(this, CitacaoDoDiaActivity.class));
-            return true;
-        } else if (itemId == R.id.action_guia) {
-            startActivity(new Intent(this, GuiaActivity.class));
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     // --- MÉTODOS AUXILIARES E DE NAVEGAÇÃO ---
@@ -120,23 +84,6 @@ public class MainActivity extends AppCompatActivity {
         btnGuiaDabar.setOnClickListener(v -> startActivity(new Intent(this, GuiaActivity.class)));
         btnDicaEstudo.setOnClickListener(v -> startActivity(new Intent(this, CitacaoDoDiaActivity.class)));
         btnMetasEstudo.setOnClickListener(v -> startActivity(new Intent(this, MetasActivity.class)));
-    }
-
-    private void setupBottomNavigation() {
-        bottomNavigation.setSelectedItemId(R.id.navigation_home);
-        bottomNavigation.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.navigation_home) {
-                return true; // Já estamos aqui.
-            } else if (itemId == R.id.navigation_library) {
-                startActivity(new Intent(this, BibliotecaActivity.class));
-                return true;
-            } else if (itemId == R.id.navigation_new_category) {
-                startActivity(new Intent(this, NovaCategoriaActivity.class));
-                return true;
-            }
-            return false;
-        });
     }
 
     // --- LÓGICA DAS NOTIFICAÇÕES ---

@@ -99,26 +99,29 @@
         android:id="@+id/signUpText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ainda não tem uma conta? Faça seu cadastro"
+        android:layout_marginBottom="32dp"
+        android:text="Ainda não tem uma conta?"
         android:textColor="#333333"
         android:textSize="16sp"
-        android:layout_marginBottom="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.09"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/signUpLink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
         android:text="Faça seu cadastro"
         android:textColor="#38A169"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:clickable="true"
-        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="@+id/signUpText"
-        app:layout_constraintEnd_toEndOf="@+id/signUpText"
-        app:layout_constraintTop_toTopOf="@+id/signUpText" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/signUpText"
+        app:layout_constraintTop_toTopOf="@+id/signUpText"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

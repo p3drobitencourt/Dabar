@@ -8,22 +8,15 @@
     android:background="#FFFFFF"
     tools:context=".MetasActivity">
 
+
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/reusable_appbar" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="24dp">
-
-        <ImageButton
-            android:id="@+id/btn_voltar_metas"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Voltar"
-            android:padding="8dp"
-            android:src="@drawable/ic_arrow_back"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="#38A169" />
 
         <TextView
             android:id="@+id/tv_titulo_metas"
@@ -36,7 +29,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_voltar_metas" />
+            app:layout_constraintTop_toBottomOf="@+id/app_bar" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewMetas"
@@ -48,6 +41,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:listitem="@layout/item_meta" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -61,5 +56,8 @@
         app:tint="@android:color/white"
         app:backgroundTint="#38A169"
         android:contentDescription="Adicionar nova meta" />
+
+
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

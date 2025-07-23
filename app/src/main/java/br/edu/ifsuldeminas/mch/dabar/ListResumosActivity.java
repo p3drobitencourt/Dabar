@@ -18,7 +18,7 @@ import br.edu.ifsuldeminas.mch.dabar.CategoriaDAO;
 import br.edu.ifsuldeminas.mch.dabar.ResumoDAO;
 import br.edu.ifsuldeminas.mch.dabar.AppDatabase;
 
-public class ListResumosActivity extends AppCompatActivity {
+public class ListResumosActivity extends BaseActivity {
 
     private RecyclerView recyclerView;
     private AdapterResumos adapter;
@@ -32,14 +32,8 @@ public class ListResumosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_resumos);
 
-        // --- CÓDIGO DA TOOLBAR COM SETA DE VOLTAR ---
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }
-        // --- FIM DA LÓGICA DA TOOLBAR ---
+        setupToolbar(true);
+        setupBottomNavigation(R.id.navigation_library);
 
         recyclerView = findViewById(R.id.recyclerViewResumos);
         AppDatabase db = AppDatabase.getDatabase(this);
@@ -47,16 +41,6 @@ public class ListResumosActivity extends AppCompatActivity {
         categoriaDao = db.categoriaDao();
     }
 
-    // --- CÓDIGO PARA FAZER A SETA FUNCIONAR ---
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-    // --- FIM DO CÓDIGO DA SETA ---
 
     // LÓGICA ORIGINAL 100% PRESERVADA
     @Override

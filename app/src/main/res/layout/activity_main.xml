@@ -8,24 +8,9 @@
     android:background="@android:color/white"
     tools:context=".MainActivity">
 
-    <androidx.appcompat.widget.Toolbar
+    <include
         android:id="@+id/app_bar"
-        android:layout_width="0dp"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@android:color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/logo_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:contentDescription="Logo Dabar"
-            android:src="@drawable/ic_dabar_logo" />
-
-    </androidx.appcompat.widget.Toolbar>
+        layout="@layout/reusable_appbar" />
 
     <TextView
         android:id="@+id/welcome_message"

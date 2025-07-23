@@ -18,7 +18,7 @@ import java.util.List;
 import br.edu.ifsuldeminas.mch.dabar.CategoriaDAO;
 import br.edu.ifsuldeminas.mch.dabar.AppDatabase;
 
-public class BibliotecaActivity extends AppCompatActivity {
+public class BibliotecaActivity extends BaseActivity {
 
     private RecyclerView recyclerViewCategorias;
     private AdapterCategorias adapter;
@@ -31,14 +31,9 @@ public class BibliotecaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_biblioteca);
 
-        // --- LÓGICA DA TOOLBAR COM BOTÃO VOLTAR ---
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }
-        // --- FIM DA LÓGICA DA TOOLBAR ---
+
+        setupToolbar(true);
+        setupBottomNavigationWithoutSelection();
 
         recyclerViewCategorias = findViewById(R.id.recyclerViewCategorias);
         fabNovaCategoria = findViewById(R.id.fab_nova_categoria);
@@ -52,15 +47,6 @@ public class BibliotecaActivity extends AppCompatActivity {
         registerForContextMenu(recyclerViewCategorias);
     }
 
-    // --- MÉTODO PARA LIDAR COM O CLIQUE NA SETA DA TOOLBAR ---
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     protected void onResume() {

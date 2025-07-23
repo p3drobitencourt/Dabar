@@ -19,10 +19,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
-import br.edu.ifsuldeminas.mch.dabar.CategoriaDAO;
-import br.edu.ifsuldeminas.mch.dabar.AppDatabase;
-
-public class NovoResumoActivity extends AppCompatActivity {
+public class NovoResumoActivity extends BaseActivity {
 
     private EditText editTextTitulo;
     private EditText editTextDescricao;
@@ -37,14 +34,8 @@ public class NovoResumoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_novo_resumo);
 
-        // --- LÓGICA DA TOOLBAR COM BOTÃO VOLTAR ---
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }
-        // --- FIM DA LÓGICA DA TOOLBAR ---
+        setupToolbar(true);
+        setupBottomNavigation(R.id.navigation_new_resume);
 
         editTextTitulo = findViewById(R.id.edit_text_titulo);
         editTextDescricao = findViewById(R.id.edit_text_descricao);
@@ -54,7 +45,6 @@ public class NovoResumoActivity extends AppCompatActivity {
 
         categoriaDao = AppDatabase.getDatabase(this).categoriaDao();
 
-        setupBottomNavigation();
 
         buttonGravar.setOnClickListener(view -> {
             String titulo = editTextTitulo.getText().toString().trim();
@@ -77,15 +67,6 @@ public class NovoResumoActivity extends AppCompatActivity {
         });
     }
 
-    // --- MÉTODO PARA LIDAR COM O CLIQUE NA SETA DA TOOLBAR ---
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     protected void onResume() {
@@ -116,20 +97,4 @@ public class NovoResumoActivity extends AppCompatActivity {
         });
     }
 
-    private void setupBottomNavigation() {
-        bottomNavigation.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.navigation_home) {
-                startActivity(new Intent(this, MainActivity.class));
-                return true;
-            } else if (itemId == R.id.navigation_library) {
-                startActivity(new Intent(this, ListResumosActivity.class));
-                return true;
-            } else if (itemId == R.id.navigation_new_category) {
-                startActivity(new Intent(this, NovaCategoriaActivity.class));
-                return true;
-            }
-            return false;
-        });
-    }
 }

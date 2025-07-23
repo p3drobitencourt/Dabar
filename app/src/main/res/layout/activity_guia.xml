@@ -4,23 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/app_bar"
-        android:layout_width="0dp"
-        android:layout_height="?attr/actionBarSize" android:background="@android:color/white"
-        android:minHeight="?attr/actionBarSize"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:contentInsetStartWithNavigation="0dp" app:contentInsetEnd="0dp"> <ImageView
-        android:id="@+id/logo_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start" android:layout_marginStart="16dp"
-        android:contentDescription="Logo Dabar"
-        android:src="@drawable/ic_dabar_logo" />
-
-    </androidx.appcompat.widget.Toolbar>
+    <include
+        android:id="@+id/include2"
+        layout="@layout/reusable_appbar" />
 
     <ScrollView
         android:id="@+id/scroll_content"
@@ -28,10 +14,10 @@
         android:layout_height="0dp"
         android:fillViewport="true"
         android:padding="16dp"
-        app:layout_constraintTop_toBottomOf="@id/app_bar"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/include2">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -42,12 +28,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Como funciona o método Dabar?"
+                android:textColor="#003C3C"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="#003C3C"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/subtitulo"
@@ -56,9 +42,9 @@
                 android:layout_marginTop="8dp"
                 android:text="Aprenda e memorize com sua própria voz, usando a força da narrativa oral — como os antigos mestres hebreus."
                 android:textSize="14sp"
-                app:layout_constraintTop_toBottomOf="@id/titulo"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/titulo" />
 
             <TextView
                 android:id="@+id/passo1"
@@ -66,12 +52,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="1. Resuma com Clareza"
+                android:textColor="#007070"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="#007070"
-                app:layout_constraintTop_toBottomOf="@id/subtitulo"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/subtitulo" />
 
             <TextView
                 android:id="@+id/passo1_texto"
@@ -80,9 +66,9 @@
                 android:layout_marginTop="4dp"
                 android:text="Transforme o que você estudou em um resumo falado, com começo, meio e fim.\n→ Pense como se estivesse explicando a matéria para alguém."
                 android:textSize="14sp"
-                app:layout_constraintTop_toBottomOf="@id/passo1"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/passo1" />
 
             <TextView
                 android:id="@+id/passo2"
@@ -90,12 +76,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="2. Grave com Tempo Limitado"
+                android:textColor="#007070"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="#007070"
-                app:layout_constraintTop_toBottomOf="@id/passo1_texto"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/passo1_texto" />
 
             <TextView
                 android:id="@+id/passo2_texto"
@@ -104,9 +90,9 @@
                 android:layout_marginTop="4dp"
                 android:text="Grave esse resumo em até 3 minutos.\n→ Isso força você a organizar as ideias e focar no que realmente importa."
                 android:textSize="14sp"
-                app:layout_constraintTop_toBottomOf="@id/passo2"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/passo2" />
 
             <TextView
                 android:id="@+id/passo3"
@@ -114,12 +100,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="3. Ouça. Repita. Absorva."
+                android:textColor="#007070"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="#007070"
-                app:layout_constraintTop_toBottomOf="@id/passo2_texto"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/passo2_texto" />
 
             <TextView
                 android:id="@+id/passo3_texto"
@@ -128,9 +114,9 @@
                 android:layout_marginTop="4dp"
                 android:text="Transforme o que você estudou em um resumo falado, com começo, meio e fim.\n→ Pense como se estivesse explicando a matéria para alguém."
                 android:textSize="14sp"
-                app:layout_constraintTop_toBottomOf="@id/passo3"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/passo3" />
 
             <TextView
                 android:id="@+id/passo4"
@@ -138,12 +124,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="4. Organize seus áudios"
+                android:textColor="#007070"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="#007070"
-                app:layout_constraintTop_toBottomOf="@id/passo3_texto"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/passo3_texto" />
 
             <TextView
                 android:id="@+id/passo4_texto"
@@ -152,9 +138,9 @@
                 android:layout_marginTop="4dp"
                 android:text="Grave esse resumo em até 3 minutos.\n→ Isso força você a organizar as ideias e focar no que realmente importa."
                 android:textSize="14sp"
-                app:layout_constraintTop_toBottomOf="@id/passo4"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/passo4" />
 
             <TextView
                 android:id="@+id/passo5"
@@ -162,12 +148,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="5. Revise com Sabedoria"
+                android:textColor="#007070"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="#007070"
-                app:layout_constraintTop_toBottomOf="@id/passo4_texto"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/passo4_texto" />
 
             <TextView
                 android:id="@+id/passo5_texto"
@@ -176,9 +162,9 @@
                 android:layout_marginTop="4dp"
                 android:text="Ouça seus resumos antes de dormir, no transporte ou na véspera da prova.\n→ A fala ativa diferentes áreas do cérebro e melhora a retenção."
                 android:textSize="14sp"
-                app:layout_constraintTop_toBottomOf="@id/passo5"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/passo5" />
 
             <TextView
                 android:id="@+id/significado"
@@ -186,12 +172,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="Dabar significa “palavra com propósito”"
+                android:textColor="#007070"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="#007070"
-                app:layout_constraintTop_toBottomOf="@id/passo5_texto"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/passo5_texto" />
 
             <TextView
                 android:id="@+id/significado_texto"
@@ -200,9 +186,9 @@
                 android:layout_marginTop="4dp"
                 android:text="Este método é inspirado na tradição oral hebraica, onde o saber era passado com reverência e clareza. Agora, é sua vez de aprender com propósito."
                 android:textSize="14sp"
-                app:layout_constraintTop_toBottomOf="@id/significado"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/significado" />
 
             <TextView
                 android:id="@+id/dicas"
@@ -210,12 +196,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="Dicas rápidas:"
+                android:textColor="#007070"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="#007070"
-                app:layout_constraintTop_toBottomOf="@id/significado_texto"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/significado_texto" />
 
             <TextView
                 android:id="@+id/dicas_texto"
@@ -225,9 +211,9 @@
                 android:layout_marginBottom="32dp"
                 android:text="Use uma linguagem simples, como se estivesse contando uma história.\nFale em voz alta, com entonação.\nRepita em diferentes dias para fixar melhor.\nUse sons de fundo se quiser tornar a escuta mais agradável."
                 android:textSize="14sp"
-                app:layout_constraintTop_toBottomOf="@id/dicas"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/dicas" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

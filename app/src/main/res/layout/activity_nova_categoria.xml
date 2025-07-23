@@ -8,40 +8,22 @@
     android:background="@android:color/white"
     tools:context=".NovaCategoriaActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/header_layout"
-        android:layout_width="0dp"
-        android:layout_height="72dp"
-        android:background="@android:color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/logo_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:contentDescription="Logo Dabar"
-            android:src="@drawable/ic_dabar_logo"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/reusable_appbar" />
 
     <TextView
         android:id="@+id/page_title_new_category"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginTop="100dp"
         android:text="Nova categoria"
+        android:textColor="@android:color/black"
         android:textSize="22sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_marginTop="32dp"
-        app:layout_constraintTop_toBottomOf="@id/header_layout"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/app_bar" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/form_card_view_new_category"

@@ -16,7 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NovaMetaActivity extends AppCompatActivity {
+public class NovaMetaActivity extends BaseActivity {
 
     private static final String TAG = "NovaMetaActivity_DEBUG"; // Tag para facilitar a busca no Logcat
 
@@ -40,6 +40,9 @@ public class NovaMetaActivity extends AppCompatActivity {
         buttonSalvarMeta = findViewById(R.id.buttonSalvarMeta);
 
         buttonSalvarMeta.setOnClickListener(v -> salvarMeta());
+
+        setupToolbar(true);
+        setupBottomNavigationWithoutSelection();
     }
 
     private void salvarMeta() {

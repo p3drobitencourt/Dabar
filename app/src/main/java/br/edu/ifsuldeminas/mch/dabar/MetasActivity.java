@@ -21,7 +21,7 @@ import com.google.firebase.firestore.Query;
  * Controla a tela que lista todas as Metas de Estudo do usuário.
  * Responsável pelo 'R' (Read), 'U' (Update) e 'D' (Delete) do nosso CRUD com Firestore.
  */
-public class MetasActivity extends AppCompatActivity {
+public class MetasActivity extends BaseActivity {
 
     private static final String TAG = "MetasActivity";
 
@@ -38,9 +38,7 @@ public class MetasActivity extends AppCompatActivity {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        // Conecta e configura os botões da UI
-        btnVoltar = findViewById(R.id.btn_voltar_metas);
-        btnVoltar.setOnClickListener(v -> finish()); // Ação para fechar a tela
+        setupToolbar(true);
 
         FloatingActionButton fabNovaMeta = findViewById(R.id.fab_nova_meta);
         fabNovaMeta.setOnClickListener(v -> startActivity(new Intent(MetasActivity.this, NovaMetaActivity.class)));
