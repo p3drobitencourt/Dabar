@@ -16,13 +16,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Controla a tela de criação e edição de uma Meta de Estudo.
- * Responsável pelo 'C' (Create) e 'U' (Update) do nosso CRUD.
- */
 public class NovaMetaActivity extends AppCompatActivity {
 
-    private static final String TAG = "NovaMetaActivity";
+    private static final String TAG = "NovaMetaActivity_DEBUG"; // Tag para facilitar a busca no Logcat
 
     private TextInputEditText editTextTituloMeta;
     private TextInputEditText editTextDescricaoMeta;
@@ -36,53 +32,55 @@ public class NovaMetaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nova_meta);
 
-        // Inicializa o Firestore e pega o usuário logado
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        // Conecta as variáveis Java com os IDs do XML
         editTextTituloMeta = findViewById(R.id.editTextTituloMeta);
         editTextDescricaoMeta = findViewById(R.id.editTextDescricaoMeta);
         buttonSalvarMeta = findViewById(R.id.buttonSalvarMeta);
 
-        // Define a ação do botão de salvar
         buttonSalvarMeta.setOnClickListener(v -> salvarMeta());
     }
 
     private void salvarMeta() {
+        // --- MENSAGEM DE DIAGNÓSTICO 1 ---
+        // Veremos se o clique no botão está funcionando.
+        Log.d(TAG, "Método salvarMeta() foi chamado.");
+        Toast.makeText(this, "Tentando salvar...", Toast.LENGTH_SHORT).show();
+
         String titulo = editTextTituloMeta.getText().toString().trim();
         String descricao = editTextDescricaoMeta.getText().toString().trim();
 
-        // Validação simples para garantir que o título não está vazio
         if (TextUtils.isEmpty(titulo)) {
             Toast.makeText(this, "O título da meta é obrigatório.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Se não houver usuário logado, não podemos salvar
         if (user == null) {
             Toast.makeText(this, "Erro: Nenhum usuário logado.", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "Tentativa de salvar sem usuário logado.");
             return;
         }
 
-        // Cria um objeto (Map) para ser salvo no Firestore
         Map<String, Object> meta = new HashMap<>();
         meta.put("titulo", titulo);
         meta.put("descricao", descricao);
-        meta.put("concluida", false); // Toda nova meta começa como não concluída
-        meta.put("userId", user.getUid()); // MUITO IMPORTANTE: Associa a meta ao usuário logado
+        meta.put("concluida", false);
+        meta.put("userId", user.getUid());
 
-        // Adiciona um novo documento à coleção 'metas'
+        Log.d(TAG, "Iniciando a escrita no Firestore...");
         db.collection("metas")
                 .add(meta)
                 .addOnSuccessListener(documentReference -> {
-                    Log.d(TAG, "Meta salva com ID: " + documentReference.getId());
-                    Toast.makeText(NovaMetaActivity.this, "Meta salva com sucesso!", Toast.LENGTH_SHORT).show();
-                    finish(); // Fecha a tela e volta para a lista de metas
+                    // --- MENSAGEM DE SUCESSO ---
+                    Log.d(TAG, "SUCESSO! Meta salva com ID: " + documentReference.getId());
+                    Toast.makeText(NovaMetaActivity.this, "Meta salva com sucesso!", Toast.LENGTH_LONG).show();
+                    finish();
                 })
                 .addOnFailureListener(e -> {
-                    Log.w(TAG, "Erro ao salvar meta", e);
-                    Toast.makeText(NovaMetaActivity.this, "Erro ao salvar meta.", Toast.LENGTH_SHORT).show();
+                    // --- MENSAGEM DE FALHA DETALHADA ---
+                    Log.e(TAG, "FALHA ao salvar meta. Erro: ", e); // Loga o erro completo
+                    Toast.makeText(NovaMetaActivity.this, "ERRO ao salvar: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 });
     }
 }

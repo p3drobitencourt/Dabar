@@ -13,9 +13,6 @@
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
         android:background="@android:color/white"
-        android:minHeight="?attr/actionBarSize"
-        app:contentInsetEnd="0dp"
-        app:contentInsetStartWithNavigation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -25,7 +22,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:layout_marginStart="16dp"
             android:contentDescription="Logo Dabar"
             android:src="@drawable/ic_dabar_logo" />
 
@@ -35,21 +31,21 @@
         android:id="@+id/welcome_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:text="Bem vindo, Luís!"
+        android:layout_marginTop="32dp"
         android:textColor="@android:color/black"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/app_bar" />
+        app:layout_constraintTop_toBottomOf="@id/app_bar"
+        tools:text="Bem vindo, Luís!" />
 
     <Button
         android:id="@+id/btn_gravar_resumo"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:backgroundTint="#2EBC9D"
         android:text="Gravar novo resumo +"
@@ -84,7 +80,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         android:backgroundTint="#2EBC9D"
-        android:text="Guia do dabar"
+        android:text="Guia do Dabar"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         app:cornerRadius="30dp"
@@ -124,12 +120,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_dica_estudo" />
 
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:background="#F0EFF5"
         app:itemIconTint="@color/bottom_nav_item_color"
         app:itemTextColor="@color/bottom_nav_item_color"

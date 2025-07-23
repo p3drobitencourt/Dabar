@@ -2,11 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
+
 
     <application
         android:allowBackup="true"
@@ -19,10 +19,7 @@
         android:theme="@style/Theme.Dabar"
         tools:targetApi="31">
 
-        <activity
-            android:name=".SplashActivity"
-            android:exported="true"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+        <activity android:name=".SplashActivity" android:exported="true" android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -40,8 +37,9 @@
         <activity android:name=".BibliotecaActivity" android:exported="false" />
         <activity android:name=".NovoResumoActivity" android:exported="false" />
         <activity android:name=".ListResumosActivity" android:exported="false" />
-
         <activity android:name=".MetasActivity" android:exported="false" />
+
+        <activity android:name=".NovaMetaActivity" android:exported="false" />
 
         <activity
             android:name=".MainActivity"

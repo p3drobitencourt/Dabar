@@ -9,13 +9,11 @@ import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar; // Importação necessária
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.io.IOException;
 import java.util.List;
-
 import br.edu.ifsuldeminas.mch.dabar.CategoriaDAO;
 import br.edu.ifsuldeminas.mch.dabar.ResumoDAO;
 import br.edu.ifsuldeminas.mch.dabar.AppDatabase;
@@ -34,32 +32,33 @@ public class ListResumosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_resumos);
 
-        // --- LÓGICA DA TOOLBAR COM BOTÃO VOLTAR ---
+        // --- CÓDIGO DA TOOLBAR COM SETA DE VOLTAR ---
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Mostra a seta de voltar
-            getSupportActionBar().setDisplayShowTitleEnabled(false); // Esconde o título do app
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         // --- FIM DA LÓGICA DA TOOLBAR ---
 
         recyclerView = findViewById(R.id.recyclerViewResumos);
-
         AppDatabase db = AppDatabase.getDatabase(this);
         resumoDao = db.resumoDao();
         categoriaDao = db.categoriaDao();
     }
 
-    // --- MÉTODO PARA LIDAR COM O CLIQUE NA SETA DA TOOLBAR ---
+    // --- CÓDIGO PARA FAZER A SETA FUNCIONAR ---
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            finish(); // Fecha a activity
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
+    // --- FIM DO CÓDIGO DA SETA ---
 
+    // LÓGICA ORIGINAL 100% PRESERVADA
     @Override
     protected void onResume() {
         super.onResume();
@@ -72,7 +71,6 @@ public class ListResumosActivity extends AppCompatActivity {
             Categoria categoria = categoriaDao.findCategoriaById(resumo.getCategoriaId());
             resumo.setCategoria(categoria);
         }
-
         adapter = new AdapterResumos(this, resumos, this::ouvirResumo);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
