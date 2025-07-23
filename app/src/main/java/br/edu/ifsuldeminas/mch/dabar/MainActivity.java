@@ -80,7 +80,7 @@ public class MainActivity extends BaseActivity {
 
     private void setupButtonListeners() {
         btnGravarResumo.setOnClickListener(v -> startActivity(new Intent(this, NovoResumoActivity.class)));
-        btnBibliotecaResumos.setOnClickListener(v -> startActivity(new Intent(this, BibliotecaActivity.class))); // Corrigido para BibliotecaActivity
+        btnBibliotecaResumos.setOnClickListener(v -> startActivity(new Intent(this, ListResumosActivity.class)));
         btnGuiaDabar.setOnClickListener(v -> startActivity(new Intent(this, GuiaActivity.class)));
         btnDicaEstudo.setOnClickListener(v -> startActivity(new Intent(this, CitacaoDoDiaActivity.class)));
         btnMetasEstudo.setOnClickListener(v -> startActivity(new Intent(this, MetasActivity.class)));

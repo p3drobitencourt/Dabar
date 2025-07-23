@@ -51,7 +51,15 @@ public class BibliotecaActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        carregarCategorias();
+
+        if (categoriaDao != null && adapter != null) {
+            categorias.clear();
+            categorias.addAll(categoriaDao.listarTodasCategorias());
+            adapter.notifyDataSetChanged();
+            if (categorias.isEmpty()) {
+                Toast.makeText(this, "Nenhuma categoria encontrada. Crie uma nova!", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void carregarCategorias() {

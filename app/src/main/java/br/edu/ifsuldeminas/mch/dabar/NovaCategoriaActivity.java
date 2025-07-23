@@ -4,40 +4,42 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity; // Mantenha esta importação, pois sua BaseActivity provavelmente a utiliza.
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 
-// Importações corretas para o Room
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
-
+// ✅ CORREÇÃO: Herda da sua BaseActivity, como no resto do projeto.
 public class NovaCategoriaActivity extends BaseActivity {
 
     private TextInputEditText editTextTitulo;
     private TextInputEditText editTextDescricao;
     private Button btnCadastrar;
-    private BottomNavigationView bottomNavigation;
 
-    // A variável agora usa a interface CategoriaDao do Room.
+    // A variável para o DAO do Room está correta.
     private CategoriaDAO categoriaDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // O setContentView aponta para o layout que seu amigo criou, que está correto.
         setContentView(R.layout.activity_nova_categoria);
 
-        setupToolbar(true);
-        setupBottomNavigationWithoutSelection();
+        setupToolbar(true); // Exibe o botão de voltar.
 
-        // O Java vai encontrar esses IDs no XML do seu amigo.
+        // ✅ CORREÇÃO FINAL: Usa o ID correto para a tela atual.
+        // Isso fará com que o ícone "Nova Categoria" fique selecionado.
+        setupBottomNavigation(R.id.navigation_new_category);
+
+        // Mapeamento dos componentes visuais.
         editTextTitulo = findViewById(R.id.edit_text_titulo_categoria);
         editTextDescricao = findViewById(R.id.edit_text_descricao_categoria);
         btnCadastrar = findViewById(R.id.btn_cadastrar_categoria);
-        bottomNavigation = findViewById(R.id.bottom_navigation);
 
-        // INICIALIZAÇÃO CORRETA DO DAO DO ROOM
+        // Inicializa o DAO do Room.
         categoriaDao = AppDatabase.getDatabase(this).categoriaDao();
 
         btnCadastrar.setOnClickListener(v -> salvarCategoria());
@@ -56,15 +58,23 @@ public class NovaCategoriaActivity extends BaseActivity {
         novaCategoria.setTitulo(titulo);
         novaCategoria.setDescricao(descricao);
 
-        try {
-            // A chamada agora é para o DAO do Room.
-            categoriaDao.adicionarCategoria(novaCategoria);
-            Toast.makeText(this, "Categoria cadastrada com sucesso!", Toast.LENGTH_SHORT).show();
-            finish();
-        } catch (Exception e) {
-            Toast.makeText(this, "Erro ao cadastrar categoria.", Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
+        // ✅ MELHORIA: Usa um Executor para rodar a operação do banco de dados
+        // fora da thread principal, que é a prática moderna no Android.
+        Executor executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            try {
+                categoriaDao.adicionarCategoria(novaCategoria);
+                // Após o sucesso, volta para a thread principal para mostrar o Toast e fechar a tela.
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Categoria cadastrada com sucesso!", Toast.LENGTH_SHORT).show();
+                    finish(); // Fecha a tela e retorna para a BibliotecaActivity
+                });
+            } catch (Exception e) {
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Erro ao cadastrar categoria.", Toast.LENGTH_SHORT).show();
+                });
+                e.printStackTrace();
+            }
+        });
     }
-
 }
