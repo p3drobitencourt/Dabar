@@ -14,7 +14,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CitacaoDoDiaActivity extends AppCompatActivity {
+public class CitacaoDoDiaActivity extends BaseActivity {
 
     private TextView textViewCitacao;
     private TextView textViewAutor;
@@ -25,11 +25,8 @@ public class CitacaoDoDiaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_citacao_do_dia);
 
-        // Configura a Toolbar
-        Toolbar toolbar = findViewById(R.id.topAppBar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        setupToolbar(true);
+        setupBottomNavigationWithoutSelection();
 
         // Mapeia os componentes do layout que criamos
         textViewCitacao = findViewById(R.id.text_view_citacao);
@@ -82,10 +79,4 @@ public class CitacaoDoDiaActivity extends AppCompatActivity {
         });
     }
 
-    // Permite que o botão de voltar na toolbar funcione
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
-    }
 }
